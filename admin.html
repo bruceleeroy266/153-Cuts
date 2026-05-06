@@ -926,28 +926,53 @@
             // Check if already logged in
             if (localStorage.getItem('adminLoggedIn') === 'true') {
                 showDashboard();
+                return;
             }
 
             // Show password toggle
-            document.getElementById('showPassword').addEventListener('change', (e) => {
-                document.getElementById('password').type = e.target.checked ? 'text' : 'password';
-            });
+            const showPasswordCheckbox = document.getElementById('showPassword');
+            if (showPasswordCheckbox) {
+                showPasswordCheckbox.addEventListener('change', (e) => {
+                    document.getElementById('password').type = e.target.checked ? 'text' : 'password';
+                });
+            }
 
-            // Login form
-            document.getElementById('loginForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const password = document.getElementById('password').value;
+            // Login form - attach handler directly to button click as fallback
+            const loginForm = document.getElementById('loginForm');
+            const loginBtn = loginForm ? loginForm.querySelector('button[type="submit"]') : null;
+            
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+            
+            if (loginBtn) {
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleLogin(e);
+                });
+            }
+            
+            function handleLogin(e) {
+                if (e) e.preventDefault();
+                const passwordInput = document.getElementById('password');
                 const errorDiv = document.getElementById('loginError');
+                
+                if (!passwordInput) return;
+                
+                const password = passwordInput.value;
                 
                 if (password === ADMIN_PASSWORD) {
                     localStorage.setItem('adminLoggedIn', 'true');
-                    errorDiv.style.display = 'none';
+                    if (errorDiv) errorDiv.style.display = 'none';
                     showDashboard();
                 } else {
-                    errorDiv.textContent = 'Incorrect password. Please try again.';
-                    errorDiv.style.display = 'block';
+                    if (errorDiv) {
+                        errorDiv.textContent = 'Incorrect password. Please try again.';
+                        errorDiv.style.display = 'block';
+                    }
+                    alert('Incorrect password. Please try again.');
                 }
-            });
+            }
 
             // Navigation
             document.querySelectorAll('.nav-menu a[data-section]').forEach(link => {
