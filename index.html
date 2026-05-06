@@ -119,6 +119,53 @@
             color: var(--dark);
         }
         
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--dark-gray);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                border-bottom: 1px solid var(--medium-gray);
+                transform: translateY(-150%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+            }
+            
+            .nav-links a {
+                padding: 0.75rem 1rem;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .nav-links .btn-primary {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -673,7 +720,7 @@
                 <a href="#services" class="btn-secondary">View Services</a>
             </div>
             <div class="hero-image">
-                <img src="./images/hero-tools.png" alt="Professional barber tools">
+                <img src="images/hero-tools.png" alt="Professional barber tools">
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -726,7 +773,7 @@
                 </div>
             </div>
             <div style="margin-top: 4rem; text-align: center;">
-                <img src="./images/barber-tools.png" alt="Professional barber tools" style="max-width: 400px; width: 100%; border-radius: 16px; border: 2px solid var(--gold);">
+                <img src="images/barber-tools.png" alt="Professional barber tools" style="max-width: 400px; width: 100%; border-radius: 16px; border: 2px solid var(--gold);">
             </div>
         </div>
     </section>
@@ -824,7 +871,7 @@
                 <p>Follow @Flying_oppusit on TikTok for daily cuts and transformations.</p>
             </div>
             <div class="tiktok-grid">
-                <div class="tiktok-card" style="background: url('./images/tiktok-tools.png') center/cover no-repeat; position: relative;">
+                <div class="tiktok-card" style="background: url('images/tiktok-tools.png') center/cover no-repeat; position: relative;">
                     <a href="https://tiktok.com/@Flying_oppusit" target="_blank" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-decoration: none; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.4) 100%);">
                         <i class="fab fa-tiktok" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></i>
                         <p style="color: white; font-weight: 700; font-size: 1.25rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">@Flying_oppusit</p>
@@ -1132,6 +1179,34 @@
         
         // Set minimum date to today
         document.getElementById('date').min = new Date().toISOString().split('T')[0];
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                if (navLinks.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+            
+            // Close menu when clicking a link
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    const icon = mobileMenuBtn.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+        }
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
