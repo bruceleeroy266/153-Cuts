@@ -21,11 +21,7 @@
             --info: #3b82f6;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', sans-serif;
@@ -104,127 +100,7 @@
             transition: all 0.3s;
         }
         
-        .btn-primary:hover {
-            background: var(--gold-light);
-        }
-        
-        .security-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid var(--warning);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            font-size: 0.85rem;
-        }
-        
-        .security-warning i {
-            color: var(--warning);
-            margin-right: 0.5rem;
-        }
-        
-        .security-warning strong {
-            color: var(--warning);
-        }
-        
-        /* Admin Dashboard */
-        .admin-dashboard {
-            display: none;
-            min-height: 100vh;
-        }
-        
-        .admin-dashboard.active {
-            display: block;
-        }
-        
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 260px;
-            background: var(--dark-gray);
-            border-right: 1px solid var(--medium-gray);
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-        
-        .sidebar-header {
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--medium-gray);
-            margin-bottom: 1.5rem;
-        }
-        
-        .sidebar-header h2 {
-            color: var(--gold);
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .nav-menu {
-            list-style: none;
-        }
-        
-        .nav-menu li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .nav-menu a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            color: var(--light-gray);
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        
-        .nav-menu a:hover,
-        .nav-menu a.active {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--gold);
-        }
-        
-        .nav-menu a i {
-            width: 20px;
-        }
-        
-        .badge {
-            background: var(--danger);
-            color: white;
-            font-size: 0.75rem;
-            padding: 0.125rem 0.5rem;
-            border-radius: 10px;
-            margin-left: auto;
-        }
-        
-        /* Main Content */
-        .main-content {
-            margin-left: 260px;
-            padding: 2rem;
-        }
-        
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--medium-gray);
-        }
-        
-        .top-bar h1 {
-            font-size: 1.75rem;
-        }
-        
-        .top-bar-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
+        .btn-primary:hover { background: var(--gold-light); }
         
         .btn-secondary {
             background: transparent;
@@ -252,23 +128,150 @@
             font-size: 0.9rem;
         }
         
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .btn-confirm { background: var(--success); color: white; }
+        .btn-complete { background: var(--info); color: white; }
+        .btn-cancel { background: var(--danger); color: white; }
+        .btn-pending { background: var(--warning); color: var(--dark); }
+        .btn-edit { background: var(--gold); color: var(--dark); }
+        
+        .security-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .security-warning i { color: var(--warning); margin-right: 0.5rem; }
+        .security-warning strong { color: var(--warning); }
+        
+        .error-message {
+            color: var(--danger);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .error-message.show { display: block; }
+        
+        /* Admin Dashboard */
+        .admin-dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .admin-dashboard.active { display: block; }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 260px;
+            background: var(--dark-gray);
+            border-right: 1px solid var(--medium-gray);
+            padding: 1.5rem;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--medium-gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-header h2 {
+            color: var(--gold);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-menu { list-style: none; }
+        .nav-menu li { margin-bottom: 0.5rem; }
+        
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--light-gray);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .nav-menu a:hover, .nav-menu a.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+        }
+        
+        .nav-menu a i { width: 20px; }
+        
+        .badge {
+            background: var(--danger);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .top-bar h1 { font-size: 1.75rem; }
+        
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
         /* Stats Cards */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
             margin-bottom: 2rem;
         }
         
         .stat-card {
             background: var(--dark-gray);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border: 1px solid var(--medium-gray);
         }
         
         .stat-card h3 {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             color: var(--light-gray);
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -276,12 +279,12 @@
         }
         
         .stat-value {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
             color: var(--gold);
         }
         
-        /* Bookings Section */
+        /* Sections */
         .section {
             background: var(--dark-gray);
             border-radius: 12px;
@@ -294,15 +297,16 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
-        .section-header h2 {
-            font-size: 1.25rem;
-        }
+        .section-header h2 { font-size: 1.25rem; }
         
         .filter-tabs {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
         }
         
         .filter-tab {
@@ -330,101 +334,67 @@
         .booking-card {
             background: var(--medium-gray);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-left: 4px solid var(--gold);
             transition: all 0.3s;
         }
         
-        .booking-card:hover {
-            transform: translateX(4px);
-        }
-        
-        .booking-card.pending {
-            border-left-color: var(--warning);
-        }
-        
-        .booking-card.confirmed {
-            border-left-color: var(--success);
-        }
-        
-        .booking-card.completed {
-            border-left-color: var(--info);
-        }
-        
-        .booking-card.canceled {
-            border-left-color: var(--danger);
-            opacity: 0.7;
-        }
+        .booking-card:hover { transform: translateX(4px); }
+        .booking-card.pending { border-left-color: var(--warning); }
+        .booking-card.confirmed { border-left-color: var(--success); }
+        .booking-card.completed { border-left-color: var(--info); }
+        .booking-card.canceled { border-left-color: var(--danger); opacity: 0.7; }
         
         .booking-header {
             display: flex;
             justify-content: space-between;
             align-items: start;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
-        .booking-info h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-        }
+        .booking-info h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
         
         .booking-meta {
             display: flex;
             gap: 1rem;
             color: var(--light-gray);
             font-size: 0.875rem;
+            flex-wrap: wrap;
         }
         
-        .booking-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
+        .booking-meta span { display: flex; align-items: center; gap: 0.25rem; }
         
         .status-badge {
-            padding: 0.375rem 0.75rem;
+            padding: 0.25rem 0.75rem;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
         }
         
-        .status-pending {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-        
-        .status-confirmed {
-            background: rgba(34, 197, 94, 0.2);
-            color: var(--success);
-        }
-        
-        .status-completed {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--info);
-        }
-        
-        .status-canceled {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
+        .status-pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .status-confirmed { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .status-completed { background: rgba(59, 130, 246, 0.2); color: var(--info); }
+        .status-canceled { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
         
         .booking-service {
             display: inline-block;
             background: rgba(212, 175, 55, 0.1);
             color: var(--gold);
-            padding: 0.375rem 0.75rem;
+            padding: 0.25rem 0.75rem;
             border-radius: 8px;
             font-size: 0.875rem;
             font-weight: 500;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
         
         .booking-notes {
             color: var(--light-gray);
             font-size: 0.9rem;
             font-style: italic;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
         
         .booking-actions {
@@ -433,46 +403,17 @@
             flex-wrap: wrap;
         }
         
-        .btn-small {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        
-        .btn-confirm {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-complete {
-            background: var(--info);
-            color: white;
-        }
-        
-        .btn-cancel {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .btn-pending {
-            background: var(--warning);
-            color: var(--dark);
-        }
-        
-        /* Schedule Settings */
+        /* Schedule */
         .schedule-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
         }
         
         .day-schedule {
             background: var(--medium-gray);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
         
         .day-schedule h3 {
@@ -480,17 +421,16 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 1rem;
         }
         
-        .day-schedule h3 i {
-            color: var(--gold);
-        }
+        .day-schedule h3 i { color: var(--gold); }
         
         .time-inputs {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             align-items: center;
-            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
         
         .time-inputs label {
@@ -498,6 +438,7 @@
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+            font-size: 0.9rem;
         }
         
         .time-inputs input[type="checkbox"] {
@@ -528,37 +469,139 @@
             background: var(--medium-gray);
             padding: 1rem;
             border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
-        .blocked-time-info h4 {
+        .blocked-time-info h4 { margin-bottom: 0.25rem; font-size: 1rem; }
+        .blocked-time-info p { color: var(--light-gray); font-size: 0.875rem; }
+        
+        /* Clients Section */
+        .client-card {
+            background: var(--medium-gray);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+        
+        .client-name { font-size: 1.1rem; font-weight: 600; }
+        .client-phone { color: var(--light-gray); font-size: 0.9rem; }
+        
+        .client-stats {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .client-stat {
+            background: var(--dark-gray);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+        }
+        
+        .client-stat span { color: var(--gold); font-weight: 600; }
+        
+        /* Notes */
+        .notes-section {
+            background: var(--dark-gray);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.75rem;
+        }
+        
+        .notes-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 0.75rem;
+        }
+        
+        .note-item {
+            background: var(--medium-gray);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .note-date {
+            font-size: 0.75rem;
+            color: var(--light-gray);
             margin-bottom: 0.25rem;
         }
         
-        .blocked-time-info p {
+        .add-note-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .add-note-form input {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--medium-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            color: var(--white);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.active { display: flex; }
+        
+        .modal-content {
+            background: var(--medium-gray);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--gold);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 { margin: 0; }
+        
+        .close-modal {
+            background: none;
+            border: none;
             color: var(--light-gray);
-            font-size: 0.875rem;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                position: relative;
-                border-right: none;
-                border-bottom: 1px solid var(--medium-gray);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .admin-dashboard {
-                display: flex;
-                flex-direction: column;
-            }
-        }
+        .close-modal:hover { color: var(--gold); }
         
-        /* Demo Mode Banner */
+        .modal .form-group { margin-bottom: 1rem; }
+        .modal .form-group label { font-size: 0.9rem; }
+        
+        /* Demo Banner */
         .demo-banner {
             background: rgba(59, 130, 246, 0.1);
             border: 1px solid var(--info);
@@ -570,18 +613,139 @@
             gap: 0.75rem;
         }
         
-        .demo-banner i {
-            color: var(--info);
-            font-size: 1.25rem;
+        .demo-banner i { color: var(--info); font-size: 1.25rem; }
+        .demo-banner p { margin: 0; font-size: 0.9rem; }
+        
+        /* Local Testing Warning */
+        .local-testing-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 2px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
         }
         
-        .demo-banner p {
+        .local-testing-warning i {
+            color: var(--warning);
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .local-testing-warning h3 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .local-testing-warning p {
             margin: 0;
+            color: #ccc;
             font-size: 0.9rem;
+            line-height: 1.6;
         }
         
-        .hidden {
-            display: none !important;
+        .hidden { display: none !important; }
+        
+        /* Mobile Menu Button */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1100;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 99;
+        }
+        
+        .sidebar-overlay.active { display: block; }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 280px;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 100;
+                border-right: 1px solid var(--medium-gray);
+                border-bottom: none;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 4rem 1rem 1rem;
+            }
+            
+            .admin-dashboard.active { display: block; }
+            
+            .top-bar { 
+                flex-direction: column; 
+                align-items: flex-start;
+                margin-top: 1rem;
+            }
+            
+            .top-bar-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .booking-header, .booking-meta { flex-direction: column; gap: 0.5rem; }
+            
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            
+            .filter-tabs { width: 100%; }
+            .filter-tab { flex: 1; text-align: center; padding: 0.5rem; font-size: 0.75rem; }
+            
+            .booking-actions { 
+                width: 100%; 
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+            }
+            
+            .booking-actions button { 
+                flex: none;
+                padding: 0.5rem 0.25rem;
+                font-size: 0.75rem;
+            }
+            
+            .modal-content { padding: 1rem; max-height: 85vh; margin: 1rem; }
+            
+            .day-schedule { padding: 1rem; }
+            .time-inputs { flex-direction: column; align-items: flex-start; }
+            
+            .client-header { flex-direction: column; }
+            .client-stats { flex-wrap: wrap; }
+            
+            .blocked-time-item { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -592,102 +756,88 @@
             <h1><i class="fas fa-lock"></i> Admin Login</h1>
             <p class="subtitle">153 Cuts Management</p>
             
-            <form id="loginForm">
+            <form id="loginForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required autocomplete="off">
+                </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter admin password" required>
+                    <input type="password" id="password" placeholder="Enter password" required autocomplete="off">
                     <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--light-gray); cursor: pointer;">
                         <input type="checkbox" id="showPassword" style="width: auto;"> Show password
                     </label>
                 </div>
-                <div id="loginError" style="color: #ef4444; margin-bottom: 1rem; display: none;"></div>
-                <button type="submit" class="btn-primary">
+                <div id="loginError" class="error-message"></div>
+                <button type="button" class="btn-primary" id="loginButton">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
             
             <div class="security-warning">
                 <i class="fas fa-exclamation-triangle"></i>
-                <strong>Security Notice:</strong> This password setup is temporary and should be replaced with real authentication before heavy public use.
+                <strong>TEMPORARY LOCAL SETUP:</strong> This admin portal uses local browser storage and should be replaced with proper backend authentication (Supabase/Firebase) before production deployment.
             </div>
         </div>
     </div>
 
     <!-- Admin Dashboard -->
     <div class="admin-dashboard" id="adminDashboard">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-cut"></i> 153 Cuts</h2>
             </div>
             <ul class="nav-menu">
-                <li>
-                    <a href="#" class="active" data-section="bookings">
-                        <i class="fas fa-calendar-alt"></i>
-                        Bookings
-                        <span class="badge" id="pendingCount">0</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-section="schedule">
-                        <i class="fas fa-clock"></i>
-                        Schedule
-                    </a>
-                </li>
-                <li>
-                    <a href="#" data-section="blocked">
-                        <i class="fas fa-ban"></i>
-                        Blocked Times
-                    </a>
-                </li>
-                <li>
-                    <a href="index.html" target="_blank">
-                        <i class="fas fa-external-link-alt"></i>
-                        View Site
-                    </a>
-                </li>
+                <li><a href="#" class="active" data-section="bookings"><i class="fas fa-calendar-alt"></i> Bookings <span class="badge" id="pendingCount">0</span></a></li>
+                <li><a href="#" data-section="clients"><i class="fas fa-users"></i> Clients</a></li>
+                <li><a href="#" data-section="schedule"><i class="fas fa-clock"></i> Schedule</a></li>
+                <li><a href="#" data-section="blocked"><i class="fas fa-ban"></i> Blocked Times</a></li>
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a></li>
             </ul>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Demo Mode Banner -->
+            <!-- Local Testing Warning -->
+            <div class="local-testing-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Local Testing Only</h3>
+                <p>This admin portal is for <strong>local testing only</strong>. It will not receive public bookings on Vercel unless Supabase/backend is connected. Bookings are stored in your browser and won't sync across devices.</p>
+            </div>
+            
+            <!-- Demo Banner -->
             <div class="demo-banner" id="demoBanner">
                 <i class="fas fa-info-circle"></i>
-                <p><strong>Demo Mode:</strong> Using local storage. Bookings will not sync across devices. Connect Supabase for production use.</p>
+                <p><strong>Local Mode:</strong> Using browser storage. Data won't sync across devices. Connect Supabase for production.</p>
             </div>
 
             <!-- Top Bar -->
             <div class="top-bar">
-                <h1>Dashboard</h1>
+                <h1 id="pageTitle">Dashboard</h1>
                 <div class="top-bar-actions">
-                    <a href="index.html" class="btn-secondary" target="_blank">
-                        <i class="fas fa-eye"></i> View Site
-                    </a>
-                    <button class="btn-danger" onclick="logout()">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
+                    <span id="adminName" style="color: var(--light-gray); font-size: 0.9rem;"></span>
+                    <a href="index.html" class="btn-secondary" target="_blank"><i class="fas fa-eye"></i> View Site</a>
+                    <button class="btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
 
             <!-- Stats -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Pending</h3>
-                    <div class="stat-value" id="statPending">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Confirmed Today</h3>
-                    <div class="stat-value" id="statToday">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>This Week</h3>
-                    <div class="stat-value" id="statWeek">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Bookings</h3>
-                    <div class="stat-value" id="statTotal">0</div>
-                </div>
+                <div class="stat-card"><h3>Pending</h3><div class="stat-value" id="statPending">0</div></div>
+                <div class="stat-card"><h3>Confirmed Today</h3><div class="stat-value" id="statToday">0</div></div>
+                <div class="stat-card"><h3>This Week</h3><div class="stat-value" id="statWeek">0</div></div>
+                <div class="stat-card"><h3>Total</h3><div class="stat-value" id="statTotal">0</div></div>
+                <div class="stat-card"><h3>Completed</h3><div class="stat-value" id="statCompleted">0</div></div>
+                <div class="stat-card"><h3>Canceled</h3><div class="stat-value" id="statCanceled">0</div></div>
             </div>
 
             <!-- Bookings Section -->
@@ -702,214 +852,156 @@
                         <button class="filter-tab" data-filter="canceled">Canceled</button>
                     </div>
                 </div>
-                <div class="bookings-list" id="bookingsList">
-                    <!-- Bookings will be loaded here -->
+                <div class="bookings-list" id="bookingsList"></div>
+            </div>
+
+            <!-- Clients Section -->
+            <div class="section hidden" id="clientsSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> Clients</h2>
                 </div>
+                <div id="clientsList"></div>
             </div>
 
             <!-- Schedule Section -->
             <div class="section hidden" id="scheduleSection">
                 <div class="section-header">
                     <h2><i class="fas fa-clock"></i> Weekly Schedule</h2>
-                    <button class="btn-primary" onclick="saveSchedule()" style="width: auto; padding: 0.5rem 1.5rem;">
-                        <i class="fas fa-save"></i> Save Schedule
-                    </button>
+                    <button class="btn-primary" onclick="saveSchedule()" style="width: auto; padding: 0.5rem 1.5rem;"><i class="fas fa-save"></i> Save</button>
                 </div>
-                <div class="schedule-grid" id="scheduleGrid">
-                    <!-- Schedule will be loaded here -->
-                </div>
+                <div class="schedule-grid" id="scheduleGrid"></div>
             </div>
 
             <!-- Blocked Times Section -->
             <div class="section hidden" id="blockedSection">
                 <div class="section-header">
                     <h2><i class="fas fa-ban"></i> Blocked Times</h2>
-                    <button class="btn-primary" onclick="addBlockedTime()" style="width: auto; padding: 0.5rem 1.5rem;">
-                        <i class="fas fa-plus"></i> Add Blocked Time
-                    </button>
+                    <button class="btn-primary" onclick="openBlockedModal()" style="width: auto; padding: 0.5rem 1.5rem;"><i class="fas fa-plus"></i> Add</button>
                 </div>
-                <div class="blocked-times-list" id="blockedList">
-                    <!-- Blocked times will be loaded here -->
-                </div>
+                <div class="blocked-times-list" id="blockedList"></div>
             </div>
         </main>
     </div>
 
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    
+    <!-- Edit Booking Modal -->
+    <div class="modal" id="editBookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Booking</h3>
+                <button class="close-modal" onclick="closeModal('editBookingModal')">&times;</button>
+            </div>
+            <form id="editBookingForm">
+                <input type="hidden" id="editBookingId">
+                <div class="form-group">
+                    <label>Client Name</label>
+                    <input type="text" id="editName" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="editPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmail">
+                </div>
+                <div class="form-group">
+                    <label>Service</label>
+                    <select id="editService" required>
+                        <option value="Haircut">Haircut - $15</option>
+                        <option value="Beard Trim">Beard Trim - $10</option>
+                        <option value="Haircut + Beard">Haircut + Beard - $22</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="editDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Time</label>
+                    <input type="time" id="editTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="editStatus">
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="canceled">Canceled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <input type="text" id="editNotes" placeholder="Client notes...">
+                </div>
+                <button type="submit" class="btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Blocked Time Modal -->
+    <div class="modal" id="blockedModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Block Time Slot</h3>
+                <button class="close-modal" onclick="closeModal('blockedModal')">&times;</button>
+            </div>
+            <form id="blockedForm">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="blockedDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <input type="time" id="blockedStart" required>
+                </div>
+                <div class="form-group">
+                    <label>End Time</label>
+                    <input type="time" id="blockedEnd" required>
+                </div>
+                <div class="form-group">
+                    <label>Reason (optional)</label>
+                    <input type="text" id="blockedReason" placeholder="e.g., Personal appointment">
+                </div>
+                <button type="submit" class="btn-primary">Block Time</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // ============================================
-        // CONFIGURATION
+        // ⚠️ TEMPORARY LOCAL SETUP - FOR DEVELOPMENT ONLY
         // ============================================
-        
+        // WARNING: Hardcoded credentials below are for LOCAL TESTING ONLY.
+        // These credentials are NOT secure for production use.
+        // 
+        // BEFORE DEPLOYING TO PRODUCTION:
+        // 1. Remove hardcoded credentials
+        // 2. Implement proper backend authentication (Supabase Auth, Firebase Auth, etc.)
+        // 3. Use environment variables for secrets
+        // 4. Enable HTTPS-only cookies for session management
         // ============================================
-        // EDITABLE CONFIGURATION
-        // ============================================
-        
-        // 1. ADMIN PASSWORD: Change this before going live!
-        const ADMIN_PASSWORD = 'BarberPro925!';  // <-- CHANGE THIS PASSWORD
-        
-        // 2. DEFAULT SCHEDULE: Edit business hours below
-        // 3. SUPABASE: Set USE_SUPABASE to true and add credentials for production
-        
-        // ============================================
-        // SUPABASE CONFIGURATION
-        // ============================================
-        // Set to true and add credentials when ready for production
-        const USE_SUPABASE = false;                          // <-- SET TO TRUE
-        const SUPABASE_URL = 'YOUR_SUPABASE_URL';            // <-- YOUR URL
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';       // <-- YOUR KEY
-        
-        // Initialize Supabase
-        let supabase = null;
-        if (USE_SUPABASE && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        }
-        
-        // ============================================
-        // DATA FUNCTIONS
-        // ============================================
-        
-        async function getBookings() {
-            if (USE_SUPABASE && supabase) {
-                const { data, error } = await supabase.from('bookings').select('*').order('date', { ascending: true });
-                if (error) throw error;
-                return data || [];
-            }
-            return JSON.parse(localStorage.getItem('bookings') || '[]');
-        }
-        
-        async function updateBookingStatus(id, status) {
-            if (USE_SUPABASE && supabase) {
-                const { error } = await supabase.from('bookings').update({ status }).eq('id', id);
-                if (error) throw error;
-                return;
-            }
-            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-            const booking = bookings.find(b => b.id === id);
-            if (booking) {
-                booking.status = status;
-                localStorage.setItem('bookings', JSON.stringify(bookings));
-            }
-        }
-        
-        async function deleteBooking(id) {
-            if (USE_SUPABASE && supabase) {
-                const { error } = await supabase.from('bookings').delete().eq('id', id);
-                if (error) throw error;
-                return;
-            }
-            let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-            bookings = bookings.filter(b => b.id !== id);
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-        }
-        
-        async function getSchedule() {
-            if (USE_SUPABASE && supabase) {
-                const { data, error } = await supabase.from('schedule').select('*');
-                if (error) throw error;
-                // Convert array to object
-                const schedule = {};
-                data.forEach(day => {
-                    schedule[day.day] = {
-                        open: day.open,
-                        start: day.start_time,
-                        end: day.end_time
-                    };
-                });
-                return schedule;
-            }
-            return JSON.parse(localStorage.getItem('schedule') || JSON.stringify(defaultSchedule));
-        }
-        
-        async function saveScheduleToDB(schedule) {
-            if (USE_SUPABASE && supabase) {
-                // Update each day
-                for (const [day, settings] of Object.entries(schedule)) {
-                    const { error } = await supabase.from('schedule').update({
-                        open: settings.open,
-                        start_time: settings.start,
-                        end_time: settings.end
-                    }).eq('day', day);
-                    if (error) throw error;
-                }
-                return;
-            }
-            localStorage.setItem('schedule', JSON.stringify(schedule));
-        }
-        
-        async function getBlockedTimes() {
-            if (USE_SUPABASE && supabase) {
-                const { data, error } = await supabase.from('blocked_times').select('*').order('date', { ascending: true });
-                if (error) throw error;
-                return data || [];
-            }
-            return JSON.parse(localStorage.getItem('blockedTimes') || '[]');
-        }
-        
-        async function addBlockedTimeToDB(blocked) {
-            if (USE_SUPABASE && supabase) {
-                const { error } = await supabase.from('blocked_times').insert([{
-                    date: blocked.date,
-                    start_time: blocked.start,
-                    end_time: blocked.end,
-                    reason: blocked.reason
-                }]);
-                if (error) throw error;
-                return;
-            }
-            const blockedTimes = JSON.parse(localStorage.getItem('blockedTimes') || '[]');
-            blockedTimes.push(blocked);
-            localStorage.setItem('blockedTimes', JSON.stringify(blockedTimes));
-        }
-        
-        async function removeBlockedTimeFromDB(index, id) {
-            if (USE_SUPABASE && supabase) {
-                const { error } = await supabase.from('blocked_times').delete().eq('id', id);
-                if (error) throw error;
-                return;
-            }
-            const blockedTimes = JSON.parse(localStorage.getItem('blockedTimes') || '[]');
-            blockedTimes.splice(index, 1);
-            localStorage.setItem('blockedTimes', JSON.stringify(blockedTimes));
-        }
-        
-        // Demo data
-        const demoBookings = [
-            {
-                id: '1',
-                name: 'John Smith',
-                phone: '(405) 555-0123',
-                email: 'john@example.com',
-                service: 'Haircut',
-                date: '2026-05-04',
-                time: '10:00 AM',
-                notes: 'First time client',
-                status: 'pending',
-                createdAt: '2026-05-03T10:00:00'
-            },
-            {
-                id: '2',
-                name: 'Mike Johnson',
-                phone: '(405) 555-0456',
-                service: 'Haircut + Beard',
-                date: '2026-05-04',
-                time: '2:00 PM',
-                status: 'confirmed',
-                createdAt: '2026-05-02T14:00:00'
-            },
-            {
-                id: '3',
-                name: 'David Williams',
-                phone: '(405) 555-0789',
-                service: 'Beard Trim',
-                date: '2026-05-05',
-                time: '11:00 AM',
-                status: 'completed',
-                createdAt: '2026-05-01T09:00:00'
-            }
-        ];
+
+        const ADMIN_CREDENTIALS = {
+            username: 'admin',
+            password: '153CutsAdmin123!',
+            name: 'Admin'
+        };
+
+        const SESSION_KEYS = {
+            loggedIn: 'adminLoggedIn',
+            username: 'adminUsername',
+            name: 'adminName',
+            loginTime: 'adminLoginTimestamp',
+            lastActivity: 'adminLastActivity'
+        };
+
+        const STORAGE_KEYS = {
+            bookings: 'bookings',
+            schedule: 'schedule',
+            blockedTimes: 'blockedTimes',
+            clientNotes: 'clientNotes',
+            clientProfiles: 'clientProfiles'
+        };
 
         const defaultSchedule = {
             monday: { open: false, start: '09:00', end: '18:00' },
@@ -922,67 +1014,42 @@
         };
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if already logged in
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setupEventListeners();
+        });
+
+        function checkAuth() {
+            const isLoggedIn = sessionStorage.getItem(SESSION_KEYS.loggedIn) === 'true';
+            if (isLoggedIn) {
                 showDashboard();
-                return;
+            } else {
+                showLogin();
             }
+        }
 
-            // Show password toggle
-            const showPasswordCheckbox = document.getElementById('showPassword');
-            if (showPasswordCheckbox) {
-                showPasswordCheckbox.addEventListener('change', (e) => {
-                    document.getElementById('password').type = e.target.checked ? 'text' : 'password';
-                });
-            }
+        function setupEventListeners() {
+            // Login
+            document.getElementById('loginButton').addEventListener('click', doLogin);
+            document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); doLogin(); });
+            
+            // Show password
+            document.getElementById('showPassword').addEventListener('change', function() {
+                document.getElementById('password').type = this.checked ? 'text' : 'password';
+            });
 
-            // Login form - attach handler directly to button click as fallback
-            const loginForm = document.getElementById('loginForm');
-            const loginBtn = loginForm ? loginForm.querySelector('button[type="submit"]') : null;
-            
-            if (loginForm) {
-                loginForm.addEventListener('submit', handleLogin);
-            }
-            
-            if (loginBtn) {
-                loginBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    handleLogin(e);
-                });
-            }
-            
-            function handleLogin(e) {
-                if (e) e.preventDefault();
-                const passwordInput = document.getElementById('password');
-                const errorDiv = document.getElementById('loginError');
-                
-                if (!passwordInput) return;
-                
-                const password = passwordInput.value;
-                
-                if (password === ADMIN_PASSWORD) {
-                    localStorage.setItem('adminLoggedIn', 'true');
-                    if (errorDiv) errorDiv.style.display = 'none';
-                    showDashboard();
-                } else {
-                    if (errorDiv) {
-                        errorDiv.textContent = 'Incorrect password. Please try again.';
-                        errorDiv.style.display = 'block';
-                    }
-                    alert('Incorrect password. Please try again.');
-                }
-            }
+            // Mobile menu
+            document.getElementById('mobileMenuToggle').addEventListener('click', toggleMobileMenu);
+            document.getElementById('sidebarOverlay').addEventListener('click', closeMobileMenu);
 
             // Navigation
             document.querySelectorAll('.nav-menu a[data-section]').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const section = link.dataset.section;
-                    showSection(section);
-                    
+                    showSection(link.dataset.section);
                     document.querySelectorAll('.nav-menu a').forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
+                    closeMobileMenu();
                 });
             });
 
@@ -994,140 +1061,348 @@
                     loadBookings(tab.dataset.filter);
                 });
             });
-        });
 
-        async function showDashboard() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('adminDashboard').classList.add('active');
-            
-            // Show/hide demo banner
-            const demoBanner = document.getElementById('demoBanner');
-            if (USE_SUPABASE) {
-                demoBanner.style.display = 'none';
+            // Edit form
+            document.getElementById('editBookingForm').addEventListener('submit', saveBookingEdit);
+            document.getElementById('blockedForm').addEventListener('submit', saveBlockedTime);
+        }
+        
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+            const icon = document.querySelector('#mobileMenuToggle i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        }
+        
+        function closeMobileMenu() {
+            document.getElementById('sidebar').classList.remove('active');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+            const icon = document.querySelector('#mobileMenuToggle i');
+            icon.classList.add('fa-bars');
+            icon.classList.remove('fa-times');
+        }
+
+        function doLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+                // Set session
+                sessionStorage.setItem(SESSION_KEYS.loggedIn, 'true');
+                sessionStorage.setItem(SESSION_KEYS.username, ADMIN_CREDENTIALS.username);
+                sessionStorage.setItem(SESSION_KEYS.name, ADMIN_CREDENTIALS.name);
+                sessionStorage.setItem(SESSION_KEYS.loginTime, new Date().toISOString());
+                sessionStorage.setItem(SESSION_KEYS.lastActivity, new Date().toISOString());
+                
+                errorDiv.classList.remove('show');
+                showDashboard();
+            } else {
+                errorDiv.textContent = 'Invalid username or password. Please try again.';
+                errorDiv.classList.add('show');
             }
-            
-            // Initialize data if empty (localStorage only)
-            if (!USE_SUPABASE) {
-                if (!localStorage.getItem('bookings')) {
-                    localStorage.setItem('bookings', JSON.stringify(demoBookings));
-                }
-                if (!localStorage.getItem('schedule')) {
-                    localStorage.setItem('schedule', JSON.stringify(defaultSchedule));
-                }
-                if (!localStorage.getItem('blockedTimes')) {
-                    localStorage.setItem('blockedTimes', JSON.stringify([]));
-                }
-            }
-            
-            await loadBookings('all');
-            await loadSchedule();
-            await loadBlockedTimes();
-            await updateStats();
         }
 
         function logout() {
-            localStorage.removeItem('adminLoggedIn');
+            // Clear only sessionStorage (preserve localStorage data)
+            sessionStorage.removeItem(SESSION_KEYS.loggedIn);
+            sessionStorage.removeItem(SESSION_KEYS.username);
+            sessionStorage.removeItem(SESSION_KEYS.name);
+            sessionStorage.removeItem(SESSION_KEYS.loginTime);
+            sessionStorage.removeItem(SESSION_KEYS.lastActivity);
             location.reload();
         }
 
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('adminDashboard').classList.remove('active');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('adminDashboard').classList.add('active');
+            document.getElementById('adminName').textContent = sessionStorage.getItem(SESSION_KEYS.name) || 'Admin';
+            
+            // Initialize data if empty
+            if (!localStorage.getItem(STORAGE_KEYS.bookings)) {
+                localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify([]));
+            }
+            if (!localStorage.getItem(STORAGE_KEYS.schedule)) {
+                localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(defaultSchedule));
+            }
+            if (!localStorage.getItem(STORAGE_KEYS.blockedTimes)) {
+                localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify([]));
+            }
+            if (!localStorage.getItem(STORAGE_KEYS.clientNotes)) {
+                localStorage.setItem(STORAGE_KEYS.clientNotes, JSON.stringify({}));
+            }
+            if (!localStorage.getItem(STORAGE_KEYS.clientProfiles)) {
+                localStorage.setItem(STORAGE_KEYS.clientProfiles, JSON.stringify({}));
+            }
+            
+            loadBookings('all');
+            loadClients();
+            loadSchedule();
+            loadBlockedTimes();
+            updateStats();
+        }
+
         function showSection(section) {
-            document.getElementById('bookingsSection').classList.add('hidden');
-            document.getElementById('scheduleSection').classList.add('hidden');
-            document.getElementById('blockedSection').classList.add('hidden');
-            
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
             document.getElementById(section + 'Section').classList.remove('hidden');
-        }
-
-        async function loadBookings(filter = 'all') {
-            try {
-                const bookings = await getBookings();
-                const container = document.getElementById('bookingsList');
-                
-                const filtered = filter === 'all' 
-                    ? bookings 
-                    : bookings.filter(b => b.status === filter);
-                
-                if (filtered.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; color: var(--light-gray); padding: 2rem;">No bookings found</p>';
-                    return;
-                }
-                
-                // Sort by date, then time
-                filtered.sort((a, b) => {
-                    const dateA = new Date(a.date + ' ' + a.time);
-                    const dateB = new Date(b.date + ' ' + b.time);
-                    return dateA - dateB;
-                });
-                
-                container.innerHTML = filtered.map(booking => `
-                    <div class="booking-card ${booking.status}">
-                        <div class="booking-header">
-                            <div class="booking-info">
-                                <h3>${booking.name}</h3>
-                                <div class="booking-meta">
-                                    <span><i class="fas fa-phone"></i> ${booking.phone}</span>
-                                    <span><i class="fas fa-calendar"></i> ${formatDate(booking.date)}</span>
-                                    <span><i class="fas fa-clock"></i> ${booking.time}</span>
-                                </div>
-                            </div>
-                            <span class="status-badge status-${booking.status}">${booking.status}</span>
-                        </div>
-                        <div class="booking-service">${booking.service}</div>
-                        ${booking.notes ? `<div class="booking-notes">"${booking.notes}"</div>` : ''}
-                        <div class="booking-actions">
-                            ${booking.status !== 'confirmed' ? `<button class="btn-small btn-confirm" onclick="updateStatus('${booking.id}', 'confirmed')">Confirm</button>` : ''}
-                            ${booking.status !== 'completed' ? `<button class="btn-small btn-complete" onclick="updateStatus('${booking.id}', 'completed')">Complete</button>` : ''}
-                            ${booking.status !== 'canceled' ? `<button class="btn-small btn-cancel" onclick="updateStatus('${booking.id}', 'canceled')">Cancel</button>` : ''}
-                            ${booking.status === 'canceled' ? `<button class="btn-small btn-pending" onclick="updateStatus('${booking.id}', 'pending')">Reactivate</button>` : ''}
-                            <button class="btn-small btn-cancel" onclick="deleteBooking('${booking.id}')" style="margin-left: auto;"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                `).join('');
-                
-                await updateStats();
-            } catch (error) {
-                console.error('Error loading bookings:', error);
-                alert('Error loading bookings. Check console.');
-            }
-        }
-
-        async function updateStatus(id, status) {
-            try {
-                await updateBookingStatus(id, status);
-                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
-                await loadBookings(activeFilter);
-            } catch (error) {
-                console.error('Error updating status:', error);
-                alert('Error updating booking status');
-            }
-        }
-
-        async function deleteBooking(id) {
-            if (!confirm('Delete this booking permanently?')) return;
             
-            try {
-                await deleteBookingFromDB(id);
-                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
-                await loadBookings(activeFilter);
-            } catch (error) {
-                console.error('Error deleting booking:', error);
-                alert('Error deleting booking');
-            }
+            const titles = {
+                bookings: 'Bookings',
+                clients: 'Clients',
+                schedule: 'Schedule',
+                blocked: 'Blocked Times'
+            };
+            document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
+            
+            if (section === 'clients') loadClients();
+            if (section === 'schedule') loadSchedule();
+            if (section === 'blocked') loadBlockedTimes();
         }
-        
-        async function deleteBookingFromDB(id) {
-            if (USE_SUPABASE && supabase) {
-                const { error } = await supabase.from('bookings').delete().eq('id', id);
-                if (error) throw error;
+
+        // Bookings
+        function getBookings() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+        }
+
+        function saveBookings(bookings) {
+            localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
+        }
+
+        function loadBookings(filter = 'all') {
+            const bookings = getBookings();
+            const container = document.getElementById('bookingsList');
+            
+            const filtered = filter === 'all' ? bookings : bookings.filter(b => b.status === filter);
+            
+            // Sort by date/time
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.date + 'T' + convertTo24Hour(a.time));
+                const dateB = new Date(b.date + 'T' + convertTo24Hour(b.time));
+                return dateA - dateB;
+            });
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--light-gray); padding: 2rem;">No bookings found</p>';
                 return;
             }
-            let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-            bookings = bookings.filter(b => b.id !== id);
-            localStorage.setItem('bookings', JSON.stringify(bookings));
+            
+            container.innerHTML = filtered.map(booking => `
+                <div class="booking-card ${booking.status}">
+                    <div class="booking-header">
+                        <div class="booking-info">
+                            <h3>${escapeHtml(booking.name)}</h3>
+                            <div class="booking-meta">
+                                <span><i class="fas fa-phone"></i> ${escapeHtml(booking.phone)}</span>
+                                <span><i class="fas fa-calendar"></i> ${formatDate(booking.date)}</span>
+                                <span><i class="fas fa-clock"></i> ${booking.time}</span>
+                            </div>
+                        </div>
+                        <span class="status-badge status-${booking.status}">${booking.status}</span>
+                    </div>
+                    <div class="booking-service">${booking.service}</div>
+                    ${booking.notes ? `<div class="booking-notes">"${escapeHtml(booking.notes)}"</div>` : ''}
+                    <div class="booking-actions">
+                        ${booking.status !== 'confirmed' ? `<button class="btn-small btn-confirm" onclick="updateStatus('${booking.id}', 'confirmed')">Confirm</button>` : ''}
+                        ${booking.status !== 'completed' ? `<button class="btn-small btn-complete" onclick="updateStatus('${booking.id}', 'completed')">Complete</button>` : ''}
+                        ${booking.status !== 'canceled' ? `<button class="btn-small btn-cancel" onclick="updateStatus('${booking.id}', 'canceled')">Cancel</button>` : ''}
+                        ${booking.status === 'canceled' ? `<button class="btn-small btn-pending" onclick="updateStatus('${booking.id}', 'pending')">Reactivate</button>` : ''}
+                        <button class="btn-small btn-edit" onclick="openEditModal('${booking.id}')">Edit</button>
+                        <button class="btn-small btn-cancel" onclick="deleteBooking('${booking.id}')" style="margin-left: auto;"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            
+            updateStats();
         }
 
-        async function loadSchedule() {
-            const schedule = await getSchedule();
+        function updateStatus(id, status) {
+            const bookings = getBookings();
+            const booking = bookings.find(b => b.id === id);
+            if (booking) {
+                booking.status = status;
+                saveBookings(bookings);
+                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+                loadBookings(activeFilter);
+            }
+        }
+
+        function deleteBooking(id) {
+            if (!confirm('Delete this booking permanently?')) return;
+            let bookings = getBookings();
+            bookings = bookings.filter(b => b.id !== id);
+            saveBookings(bookings);
+            const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+            loadBookings(activeFilter);
+        }
+
+        function openEditModal(id) {
+            const bookings = getBookings();
+            const booking = bookings.find(b => b.id === id);
+            if (!booking) return;
+            
+            document.getElementById('editBookingId').value = booking.id;
+            document.getElementById('editName').value = booking.name;
+            document.getElementById('editPhone').value = booking.phone;
+            document.getElementById('editEmail').value = booking.email || '';
+            document.getElementById('editService').value = booking.service;
+            document.getElementById('editDate').value = booking.date;
+            document.getElementById('editTime').value = convertTo24Hour(booking.time);
+            document.getElementById('editStatus').value = booking.status;
+            document.getElementById('editNotes').value = booking.notes || '';
+            
+            document.getElementById('editBookingModal').classList.add('active');
+        }
+
+        function saveBookingEdit(e) {
+            e.preventDefault();
+            
+            // Validation
+            const name = document.getElementById('editName').value.trim();
+            const phone = document.getElementById('editPhone').value.trim();
+            const service = document.getElementById('editService').value;
+            const date = document.getElementById('editDate').value;
+            const time24 = document.getElementById('editTime').value;
+            
+            if (!name) { alert('Name is required'); return; }
+            if (!phone) { alert('Phone is required'); return; }
+            if (!service) { alert('Service is required'); return; }
+            if (!date) { alert('Date is required'); return; }
+            if (!time24) { alert('Time is required'); return; }
+            
+            const time = convertTo12Hour(time24);
+            const id = document.getElementById('editBookingId').value;
+            const bookings = getBookings();
+            const currentBooking = bookings.find(b => b.id === id);
+            
+            if (!currentBooking) return;
+            
+            // Check for conflicts (excluding current booking)
+            const conflict = bookings.find(b => 
+                b.id !== id && 
+                b.date === date && 
+                b.time === time && 
+                (b.status === 'pending' || b.status === 'confirmed')
+            );
+            
+            if (conflict) {
+                alert(`Cannot save: This time slot is already booked by ${conflict.name} (${conflict.status}). Please choose a different time.`);
+                return;
+            }
+            
+            // Update booking
+            currentBooking.name = name;
+            currentBooking.phone = phone;
+            currentBooking.email = document.getElementById('editEmail').value.trim();
+            currentBooking.service = service;
+            currentBooking.date = date;
+            currentBooking.time = time;
+            currentBooking.status = document.getElementById('editStatus').value;
+            currentBooking.notes = document.getElementById('editNotes').value.trim();
+            
+            saveBookings(bookings);
+            closeModal('editBookingModal');
+            const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+            loadBookings(activeFilter);
+            updateStats();
+        }
+
+        // Clients
+        function loadClients() {
+            const bookings = getBookings();
+            const clientNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientNotes) || '{}');
+            
+            // Group by phone
+            const clients = {};
+            bookings.forEach(b => {
+                const key = b.phone;
+                if (!clients[key]) {
+                    clients[key] = {
+                        name: b.name,
+                        phone: b.phone,
+                        email: b.email,
+                        bookings: [],
+                        completed: 0,
+                        canceled: 0,
+                        noShow: 0
+                    };
+                }
+                clients[key].bookings.push(b);
+                if (b.status === 'completed') clients[key].completed++;
+                if (b.status === 'canceled') clients[key].canceled++;
+            });
+            
+            const container = document.getElementById('clientsList');
+            const clientList = Object.values(clients).sort((a, b) => b.bookings.length - a.bookings.length);
+            
+            if (clientList.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--light-gray); padding: 2rem;">No clients yet</p>';
+                return;
+            }
+            
+            container.innerHTML = clientList.map(client => {
+                const notes = clientNotes[client.phone] || [];
+                return `
+                    <div class="client-card">
+                        <div class="client-header">
+                            <div>
+                                <div class="client-name">${escapeHtml(client.name)}</div>
+                                <div class="client-phone">${escapeHtml(client.phone)} ${client.email ? '| ' + escapeHtml(client.email) : ''}</div>
+                            </div>
+                        </div>
+                        <div class="client-stats">
+                            <div class="client-stat">Visits: <span>${client.completed}</span></div>
+                            <div class="client-stat">Canceled: <span>${client.canceled}</span></div>
+                            <div class="client-stat">Total: <span>${client.bookings.length}</span></div>
+                        </div>
+                        <div class="notes-section">
+                            <div class="notes-list" id="notes-${client.phone}">
+                                ${notes.length === 0 ? '<p style="color: var(--light-gray); font-size: 0.85rem;">No notes yet</p>' : 
+                                    notes.map(n => `
+                                        <div class="note-item">
+                                            <div class="note-date">${formatDate(n.date)} ${n.bookingId ? '(Booking #' + n.bookingId.slice(-4) + ')' : ''}</div>
+                                            <div>${escapeHtml(n.note)}</div>
+                                        </div>
+                                    `).join('')
+                                }
+                            </div>
+                            <div class="add-note-form">
+                                <input type="text" id="note-input-${client.phone}" placeholder="Add note (haircut details, preferences...)" maxlength="200">
+                                <button class="btn-small btn-confirm" onclick="addClientNote('${client.phone}')">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addClientNote(phone) {
+            const input = document.getElementById(`note-input-${phone}`);
+            const noteText = input.value.trim();
+            if (!noteText) return;
+            
+            const clientNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientNotes) || '{}');
+            if (!clientNotes[phone]) clientNotes[phone] = [];
+            
+            clientNotes[phone].push({
+                date: new Date().toISOString(),
+                note: noteText,
+                bookingId: null,
+                createdAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem(STORAGE_KEYS.clientNotes, JSON.stringify(clientNotes));
+            loadClients();
+        }
+
+        // Schedule
+        function loadSchedule() {
+            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
             const container = document.getElementById('scheduleGrid');
             
             const days = [
@@ -1140,53 +1415,45 @@
                 { key: 'sunday', label: 'Sunday' }
             ];
             
-            container.innerHTML = days.map(day => `
-                <div class="day-schedule">
-                    <h3><i class="fas fa-calendar-day"></i> ${day.label}</h3>
-                    <div class="time-inputs">
-                        <label>
-                            <input type="checkbox" ${schedule[day.key].open ? 'checked' : ''} 
-                                onchange="toggleDay('${day.key}', this.checked)">
-                            Open
-                        </label>
-                        <input type="time" value="${schedule[day.key].start}" 
-                            onchange="updateTime('${day.key}', 'start', this.value)"
-                            ${!schedule[day.key].open ? 'disabled' : ''}>
-                        <span>to</span>
-                        <input type="time" value="${schedule[day.key].end}" 
-                            onchange="updateTime('${day.key}', 'end', this.value)"
-                            ${!schedule[day.key].open ? 'disabled' : ''}>
+            container.innerHTML = days.map(day => {
+                const settings = schedule[day.key] || defaultSchedule[day.key];
+                return `
+                    <div class="day-schedule">
+                        <h3><i class="fas fa-calendar-day"></i> ${day.label}</h3>
+                        <div class="time-inputs">
+                            <label>
+                                <input type="checkbox" ${settings.open ? 'checked' : ''} onchange="toggleDay('${day.key}', this.checked)">
+                                Open
+                            </label>
+                            <input type="time" value="${settings.start}" onchange="updateTime('${day.key}', 'start', this.value)" ${!settings.open ? 'disabled' : ''}>
+                            <span>to</span>
+                            <input type="time" value="${settings.end}" onchange="updateTime('${day.key}', 'end', this.value)" ${!settings.open ? 'disabled' : ''}>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function toggleDay(day, isOpen) {
-            const schedule = JSON.parse(localStorage.getItem('schedule') || JSON.stringify(defaultSchedule));
+            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
             schedule[day].open = isOpen;
-            localStorage.setItem('schedule', JSON.stringify(schedule));
+            localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
             loadSchedule();
         }
 
         function updateTime(day, type, value) {
-            const schedule = JSON.parse(localStorage.getItem('schedule') || JSON.stringify(defaultSchedule));
+            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
             schedule[day][type] = value;
-            localStorage.setItem('schedule', JSON.stringify(schedule));
+            localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
         }
 
-        async function saveSchedule() {
-            try {
-                const schedule = await getSchedule();
-                await saveScheduleToDB(schedule);
-                alert('Schedule saved!');
-            } catch (error) {
-                console.error('Error saving schedule:', error);
-                alert('Error saving schedule');
-            }
+        function saveSchedule() {
+            alert('Schedule saved!');
         }
 
-        async function loadBlockedTimes() {
-            const blocked = await getBlockedTimes();
+        // Blocked Times
+        function loadBlockedTimes() {
+            const blocked = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
             const container = document.getElementById('blockedList');
             
             if (blocked.length === 0) {
@@ -1198,54 +1465,79 @@
                 <div class="blocked-time-item">
                     <div class="blocked-time-info">
                         <h4>${formatDate(item.date)}</h4>
-                        <p>${item.start} - ${item.end} ${item.reason ? `(${item.reason})` : ''}</p>
+                        <p>${convertTo12Hour(item.start)} - ${convertTo12Hour(item.end)} ${item.reason ? '(' + item.reason + ')' : ''}</p>
                     </div>
-                    <button class="btn-small btn-cancel" onclick="removeBlockedTime(${index})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <button class="btn-small btn-cancel" onclick="removeBlockedTime(${index})"><i class="fas fa-trash"></i></button>
                 </div>
             `).join('');
         }
 
-        async function addBlockedTime() {
-            const date = prompt('Enter date (YYYY-MM-DD):');
-            if (!date) return;
-            
-            const start = prompt('Start time (HH:MM):', '09:00');
-            if (!start) return;
-            
-            const end = prompt('End time (HH:MM):', '17:00');
-            if (!end) return;
-            
-            const reason = prompt('Reason (optional):');
-            
-            try {
-                await addBlockedTimeToDB({ date, start, end, reason });
-                await loadBlockedTimes();
-            } catch (error) {
-                console.error('Error adding blocked time:', error);
-                alert('Error adding blocked time');
-            }
+        function openBlockedModal() {
+            document.getElementById('blockedDate').value = '';
+            document.getElementById('blockedStart').value = '';
+            document.getElementById('blockedEnd').value = '';
+            document.getElementById('blockedReason').value = '';
+            document.getElementById('blockedModal').classList.add('active');
         }
 
-        async function removeBlockedTime(index) {
-            try {
-                const blocked = await getBlockedTimes();
-                const item = blocked[index];
-                await removeBlockedTimeFromDB(index, item.id);
-                await loadBlockedTimes();
-            } catch (error) {
-                console.error('Error removing blocked time:', error);
-                alert('Error removing blocked time');
+        function saveBlockedTime(e) {
+            e.preventDefault();
+            
+            // Validation
+            const date = document.getElementById('blockedDate').value;
+            const start = document.getElementById('blockedStart').value;
+            const end = document.getElementById('blockedEnd').value;
+            const reason = document.getElementById('blockedReason').value.trim();
+            
+            if (!date) { alert('Date is required'); return; }
+            if (!start) { alert('Start time is required'); return; }
+            if (!end) { alert('End time is required'); return; }
+            
+            // Check end time is after start time
+            const startMinutes = timeToMinutes(start);
+            const endMinutes = timeToMinutes(end);
+            
+            if (endMinutes <= startMinutes) {
+                alert('End time must be after start time');
+                return;
             }
+            
+            const blocked = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+            
+            blocked.push({
+                date: date,
+                start: start,
+                end: end,
+                reason: reason,
+                createdAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(blocked));
+            closeModal('blockedModal');
+            loadBlockedTimes();
+        }
+        
+        function timeToMinutes(timeStr) {
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            return hours * 60 + minutes;
         }
 
-        async function updateStats() {
-            const bookings = await getBookings();
+        function removeBlockedTime(index) {
+            const blocked = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+            blocked.splice(index, 1);
+            localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(blocked));
+            loadBlockedTimes();
+        }
+
+        // Stats
+        function updateStats() {
+            const bookings = getBookings();
             const today = new Date().toISOString().split('T')[0];
             
             const pending = bookings.filter(b => b.status === 'pending').length;
             const todayConfirmed = bookings.filter(b => b.date === today && b.status === 'confirmed').length;
+            const completed = bookings.filter(b => b.status === 'completed').length;
+            const canceled = bookings.filter(b => b.status === 'canceled').length;
             
             // This week
             const weekStart = new Date();
@@ -1255,25 +1547,60 @@
             
             const thisWeek = bookings.filter(b => {
                 const bDate = new Date(b.date);
-                return bDate >= weekStart && bDate <= weekEnd && 
-                       (b.status === 'confirmed' || b.status === 'completed');
+                return bDate >= weekStart && bDate <= weekEnd && (b.status === 'confirmed' || b.status === 'completed');
             }).length;
             
             document.getElementById('statPending').textContent = pending;
             document.getElementById('statToday').textContent = todayConfirmed;
             document.getElementById('statWeek').textContent = thisWeek;
             document.getElementById('statTotal').textContent = bookings.length;
+            document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statCanceled').textContent = canceled;
             document.getElementById('pendingCount').textContent = pending;
         }
 
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric' 
-            });
+        // Utilities
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+
+        function convertTo24Hour(time12h) {
+            const [time, modifier] = time12h.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (hours === '12') hours = '00';
+            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+            return `${hours.padStart(2, '0')}:${minutes}`;
+        }
+
+        function convertTo12Hour(time24h) {
+            const [hours, minutes] = time24h.split(':');
+            const h = parseInt(hours, 10);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12}:${minutes} ${ampm}`;
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        });
     </script>
 </body>
 </html>
