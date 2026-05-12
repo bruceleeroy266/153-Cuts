@@ -1625,12 +1625,26 @@
         // SCHEDULE - SUPABASE IS SOURCE OF TRUTH
         // ============================================
         
+        // Global schedule cache to preserve values when toggling
+        let scheduleCache = null;
+        
         async function getSchedule() {
-            // SUPABASE IS PRIMARY SOURCE
-            if (supabaseConnected) {
+            console.log('=== GETTING SCHEDULE ===');
+            
+            // ALWAYS try Supabase first if connected
+            if (supabaseConnected && supabaseClient) {
                 try {
+                    console.log('Fetching schedule from Supabase...');
                     const { data, error } = await supabaseClient.from('schedule').select('*');
-                    if (!error && data && data.length > 0) {
+                    
+                    if (error) {
+                        console.error('❌ Supabase schedule fetch failed:', error);
+                        throw error;
+                    }
+                    
+                    if (data && data.length > 0) {
+                        console.log(`✅ Loaded ${data.length} schedule rows from Supabase`);
+                        
                         const schedule = {};
                         data.forEach(s => {
                             schedule[s.day.toLowerCase()] = {
@@ -1639,19 +1653,39 @@
                                 end: s.end_time
                             };
                         });
-                        console.log('📡 Loaded schedule from Supabase');
+                        
+                        // Update cache and localStorage
+                        scheduleCache = schedule;
                         localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
+                        console.log('Schedule data:', schedule);
                         return schedule;
+                    } else {
+                        console.log('⚠️ No schedule data in Supabase, using defaults');
                     }
                 } catch (e) {
-                    console.log('Using cached localStorage schedule');
+                    console.error('❌ Failed to load from Supabase:', e);
                 }
+            } else {
+                console.log('⚠️ Supabase not connected, checking localStorage');
             }
             
-            return JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+            // Fallback to localStorage
+            const cached = localStorage.getItem(STORAGE_KEYS.schedule);
+            if (cached) {
+                console.log('📦 Using localStorage schedule');
+                scheduleCache = JSON.parse(cached);
+                return scheduleCache;
+            }
+            
+            // Final fallback to defaults
+            console.log('📦 Using default schedule');
+            scheduleCache = JSON.parse(JSON.stringify(defaultSchedule));
+            return scheduleCache;
         }
 
         async function loadSchedule() {
+            console.log('=== LOADING SCHEDULE UI ===');
+            
             const schedule = await getSchedule();
             const container = document.getElementById('scheduleGrid');
             
@@ -1667,92 +1701,47 @@
             
             container.innerHTML = days.map(day => {
                 const settings = schedule[day.key] || defaultSchedule[day.key];
+                console.log(`Rendering ${day.key}: open=${settings.open}, ${settings.start}-${settings.end}`);
+                
                 return `
-                    <div class="day-schedule">
+                    <div class="day-schedule" data-day="${day.key}">
                         <h3><i class="fas fa-calendar-day"></i> ${day.label}</h3>
                         <div class="time-inputs">
                             <label>
-                                <input type="checkbox" id="${day.key}-open" ${settings.open ? 'checked' : ''} onchange="toggleDay('${day.key}')">
-                                Open
+                                <input type="checkbox" id="${day.key}-open" ${settings.open ? 'checked' : ''} onchange="handleDayToggle('${day.key}')">
+                                <span id="${day.key}-status">${settings.open ? 'Open' : 'Closed'}</span>
                             </label>
-                            ${settings.open ? `
-                                <input type="time" id="${day.key}-start" value="${settings.start}" onchange="updateTime('${day.key}')">
-                                <span>to</span>
-                                <input type="time" id="${day.key}-end" value="${settings.end}" onchange="updateTime('${day.key}')">
-                            ` : ''}
+                            <div id="${day.key}-times" style="display: ${settings.open ? 'block' : 'none'}; margin-top: 0.5rem;">
+                                <input type="time" id="${day.key}-start" value="${settings.start}" onchange="markDirty('${day.key}')">
+                                <span> to </span>
+                                <input type="time" id="${day.key}-end" value="${settings.end}" onchange="markDirty('${day.key}')">
+                            </div>
                         </div>
                     </div>
                 `;
             }).join('');
+            
+            console.log('✅ Schedule UI rendered');
         }
 
-        async function toggleDay(day) {
-            console.log(`Toggling ${day}...`);
-            
-            // Safety check
-            if (!supabaseClient) {
-                console.error('❌ Supabase client not initialized');
-            }
-            
-            const schedule = await getSchedule();
+        function markDirty(day) {
+            console.log(`${day} marked dirty (time changed)`);
+        }
+
+        function handleDayToggle(day) {
             const isOpen = document.getElementById(day + '-open').checked;
-            schedule[day].open = isOpen;
+            const timesDiv = document.getElementById(day + '-times');
+            const statusSpan = document.getElementById(day + '-status');
             
-            console.log(`${day} is now ${isOpen ? 'OPEN' : 'CLOSED'}`);
+            console.log(`${day} toggled: ${isOpen ? 'OPEN' : 'CLOSED'}`);
             
-            // Update Supabase first (source of truth)
-            if (supabaseConnected && supabaseClient) {
-                try {
-                    const { error } = await supabaseClient.from('schedule').upsert({
-                        day: day,
-                        open: isOpen,
-                        start_time: schedule[day].start,
-                        end_time: schedule[day].end
-                    });
-                    
-                    if (error) throw error;
-                    console.log(`✅ ${day} updated in Supabase: open=${isOpen}`);
-                } catch (e) {
-                    console.error(`❌ Failed to update ${day} in Supabase:`, e);
-                }
+            if (isOpen) {
+                timesDiv.style.display = 'block';
+                statusSpan.textContent = 'Open';
+            } else {
+                timesDiv.style.display = 'none';
+                statusSpan.textContent = 'Closed';
             }
-            
-            localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
-            await loadSchedule();
-        }
-
-        async function updateTime(day) {
-            console.log(`Updating time for ${day}...`);
-            
-            // Safety check
-            if (!supabaseClient) {
-                console.error('❌ Supabase client not initialized');
-            }
-            
-            const schedule = await getSchedule();
-            schedule[day].start = document.getElementById(day + '-start').value;
-            schedule[day].end = document.getElementById(day + '-end').value;
-            
-            console.log(`${day} times: ${schedule[day].start} - ${schedule[day].end}`);
-            
-            // Update Supabase first (source of truth)
-            if (supabaseConnected && supabaseClient) {
-                try {
-                    const { error } = await supabaseClient.from('schedule').upsert({
-                        day: day,
-                        open: schedule[day].open,
-                        start_time: schedule[day].start,
-                        end_time: schedule[day].end
-                    });
-                    
-                    if (error) throw error;
-                    console.log(`✅ ${day} time updated in Supabase`);
-                } catch (e) {
-                    console.error(`❌ Failed to update ${day} time in Supabase:`, e);
-                }
-            }
-            
-            localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
         }
 
         async function saveSchedule() {
@@ -1761,18 +1750,31 @@
             // Safety check
             if (!supabaseClient) {
                 console.error('❌ Supabase client not initialized');
-                alert('Error: Supabase not connected');
+                showScheduleMessage('Error: Supabase not connected', 'error');
                 return;
             }
             
-            // Read ALL 7 days
+            // Read ALL 7 days from DOM
             const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             const scheduleData = [];
             
+            console.log('Collecting schedule data from inputs...');
+            
             days.forEach(day => {
-                const isOpen = document.getElementById(day + '-open').checked;
-                const startTime = isOpen ? document.getElementById(day + '-start').value : '09:00';
-                const endTime = isOpen ? document.getElementById(day + '-end').value : '18:00';
+                const openCheckbox = document.getElementById(day + '-open');
+                const startInput = document.getElementById(day + '-start');
+                const endInput = document.getElementById(day + '-end');
+                
+                if (!openCheckbox) {
+                    console.error(`❌ Missing element: ${day}-open`);
+                    return;
+                }
+                
+                const isOpen = openCheckbox.checked;
+                const startTime = startInput ? startInput.value : '09:00';
+                const endTime = endInput ? endInput.value : '18:00';
+                
+                console.log(`${day}: open=${isOpen}, start=${startTime}, end=${endTime}`);
                 
                 scheduleData.push({
                     day: day,
@@ -1787,20 +1789,20 @@
             // Save to Supabase
             if (supabaseConnected) {
                 try {
-                    console.log('Upserting schedule to Supabase...');
-                    const { error } = await supabaseClient
+                    console.log('Upserting to Supabase with onConflict: day...');
+                    const { data, error } = await supabaseClient
                         .from('schedule')
                         .upsert(scheduleData, { onConflict: 'day' });
                     
                     if (error) {
-                        console.error('Schedule save failed:', error);
-                        alert('Failed to save schedule: ' + error.message);
+                        console.error('❌ Schedule save failed:', error);
+                        showScheduleMessage('Schedule failed: ' + error.message, 'error');
                         return;
                     }
                     
                     console.log('✅ Schedule saved to Supabase successfully');
                     
-                    // Overwrite localStorage cache
+                    // Update cache
                     const schedule = {};
                     scheduleData.forEach(s => {
                         schedule[s.day] = {
@@ -1809,17 +1811,17 @@
                             end: s.end_time
                         };
                     });
+                    scheduleCache = schedule;
                     localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
-                    console.log('✅ localStorage cache updated');
                     
                     // Reload from Supabase to confirm
+                    console.log('Reloading schedule from Supabase...');
                     await loadSchedule();
-                    console.log('✅ Schedule reloaded from Supabase');
                     
-                    alert('Schedule saved successfully!');
+                    showScheduleMessage('Schedule saved successfully!', 'success');
                 } catch (error) {
-                    console.error('Schedule save failed:', error);
-                    alert('Error saving schedule: ' + error.message);
+                    console.error('❌ Schedule save error:', error);
+                    showScheduleMessage('Schedule failed: ' + error.message, 'error');
                 }
             } else {
                 // Fallback: save to localStorage only
@@ -1831,10 +1833,42 @@
                         end: s.end_time
                     };
                 });
+                scheduleCache = schedule;
                 localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
                 console.log('📦 Schedule saved to localStorage only');
-                alert('Schedule saved locally (Supabase not connected)');
+                showScheduleMessage('Schedule saved locally (Supabase not connected)', 'warning');
             }
+        }
+        
+        function showScheduleMessage(message, type) {
+            // Remove any existing message
+            const existing = document.getElementById('scheduleMessage');
+            if (existing) existing.remove();
+            
+            // Create message element
+            const msgDiv = document.createElement('div');
+            msgDiv.id = 'scheduleMessage';
+            msgDiv.style.cssText = `
+                padding: 1rem;
+                margin: 1rem 0;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: 500;
+                ${type === 'success' ? 'background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e;' : ''}
+                ${type === 'error' ? 'background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444;' : ''}
+                ${type === 'warning' ? 'background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b;' : ''}
+            `;
+            msgDiv.textContent = message;
+            
+            // Insert after the save button
+            const section = document.getElementById('scheduleSection');
+            const header = section.querySelector('.section-header');
+            header.insertAdjacentElement('afterend', msgDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                msgDiv.remove();
+            }, 5000);
         }
 
         // ============================================

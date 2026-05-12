@@ -944,13 +944,21 @@
 
             // Check if day is open
             const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            console.log(`Checking schedule for ${dayOfWeek}...`);
             
-            // Get schedule (from Supabase or localStorage)
+            // Get schedule - ALWAYS prefer Supabase when connected
             let schedule = defaultSchedule;
-            if (supabaseConnected) {
+            if (supabaseConnected && supabaseClient) {
                 try {
-                    const { data: scheduleData } = await supabaseClient.from('schedule').select('*');
-                    if (scheduleData) {
+                    console.log('Fetching schedule from Supabase...');
+                    const { data: scheduleData, error } = await supabaseClient.from('schedule').select('*');
+                    
+                    if (error) {
+                        console.error('❌ Failed to fetch schedule:', error);
+                        throw error;
+                    }
+                    
+                    if (scheduleData && scheduleData.length > 0) {
                         schedule = {};
                         scheduleData.forEach(s => {
                             schedule[s.day.toLowerCase()] = {
@@ -959,21 +967,33 @@
                                 end: s.end_time
                             };
                         });
+                        console.log('✅ Schedule loaded from Supabase:', schedule);
+                    } else {
+                        console.log('⚠️ No schedule data in Supabase, using defaults');
                     }
                 } catch (e) {
-                    console.log('Using default schedule');
+                    console.error('❌ Error loading schedule:', e);
+                    // Only fall back to localStorage on error
+                    schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+                    console.log('📦 Using localStorage fallback');
                 }
             } else {
+                console.log('⚠️ Supabase not connected, using localStorage');
                 schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
             }
             
             const daySchedule = schedule[dayOfWeek];
+            console.log(`${dayOfWeek} schedule:`, daySchedule);
 
             if (!daySchedule || !daySchedule.open) {
+                console.log(`${dayOfWeek} is CLOSED - showing closed message`);
                 closedMessage.classList.remove('hidden');
                 timeSlotGroup.classList.add('hidden');
+                document.getElementById('selectedTime').value = '';
                 return;
             }
+            
+            console.log(`${dayOfWeek} is OPEN: ${daySchedule.start} - ${daySchedule.end}`);
 
             closedMessage.classList.add('hidden');
             timeSlotGroup.classList.remove('hidden');
