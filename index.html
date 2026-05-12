@@ -650,7 +650,7 @@
                 
                 <div class="form-group">
                     <label>Select Time *</label>
-                    <input type="hidden" id="selectedTime" name="time" required>
+                    <input type="hidden" id="selectedTime" name="time">
                     <div class="closed-message hidden" id="closedMessage">
                         <i class="fas fa-calendar-times"></i> We're closed on this day. Please select another date.
                     </div>
@@ -1140,12 +1140,19 @@
             const date = formData.get('date');
             const time = selectedTime;
 
+            // DEBUG: Log submission start
+            console.log('=== BOOKING SUBMIT DEBUG ===');
+            console.log('Booking submit fired');
+            console.log('Selected time:', time);
+            console.log('Selected date:', date);
+
             try {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Request...';
 
                 // Double-check availability before inserting
                 const availableSlots = await getAvailableTimeSlots(date);
+                console.log('Available slots:', availableSlots);
                 if (!availableSlots.includes(time)) {
                     showBookingMessage('Sorry, this time slot was just booked. Please select another time.');
                     await updateTimeSlots();
@@ -1155,6 +1162,7 @@
                 }
 
                 // Try to save to Supabase first (source of truth)
+                console.log('Submitting booking to Supabase...');
                 if (supabaseConnected) {
                     try {
                         const { data, error } = await supabaseClient
@@ -1171,10 +1179,14 @@
                             }])
                             .select();
                         
-                        if (error) throw error;
+                        if (error) {
+                            console.error('Booking insert failed:', error);
+                            showBookingMessage('Booking failed: ' + error.message);
+                            throw error;
+                        }
                         
                         // SUCCESS: Use Supabase returned data (includes real ID)
-                        console.log('✅ Booking saved to Supabase:', data);
+                        console.log('✅ Booking insert success:', data);
                         
                         // Cache the Supabase row in localStorage (overwrite, don't append)
                         const supabaseBooking = data[0];
@@ -1204,6 +1216,8 @@
                         
                     } catch (error) {
                         console.error('❌ Supabase save failed:', error);
+                        console.error('Error details:', error.message, error.code);
+                        showBookingMessage('Error: ' + error.message);
                         console.log('📦 Falling back to localStorage only');
                         
                         // FALLBACK: Save to localStorage only

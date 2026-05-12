@@ -1687,22 +1687,33 @@
         }
 
         async function toggleDay(day) {
+            console.log(`Toggling ${day}...`);
+            
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+            }
+            
             const schedule = await getSchedule();
             const isOpen = document.getElementById(day + '-open').checked;
             schedule[day].open = isOpen;
             
+            console.log(`${day} is now ${isOpen ? 'OPEN' : 'CLOSED'}`);
+            
             // Update Supabase first (source of truth)
-            if (supabaseConnected) {
+            if (supabaseConnected && supabaseClient) {
                 try {
-                    await supabaseClient.from('schedule').upsert({
+                    const { error } = await supabaseClient.from('schedule').upsert({
                         day: day,
                         open: isOpen,
                         start_time: schedule[day].start,
                         end_time: schedule[day].end
                     });
-                    console.log('✅ Schedule day updated in Supabase');
+                    
+                    if (error) throw error;
+                    console.log(`✅ ${day} updated in Supabase: open=${isOpen}`);
                 } catch (e) {
-                    console.log('Schedule day saved to localStorage only');
+                    console.error(`❌ Failed to update ${day} in Supabase:`, e);
                 }
             }
             
@@ -1711,22 +1722,33 @@
         }
 
         async function updateTime(day) {
+            console.log(`Updating time for ${day}...`);
+            
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+            }
+            
             const schedule = await getSchedule();
             schedule[day].start = document.getElementById(day + '-start').value;
             schedule[day].end = document.getElementById(day + '-end').value;
             
+            console.log(`${day} times: ${schedule[day].start} - ${schedule[day].end}`);
+            
             // Update Supabase first (source of truth)
-            if (supabaseConnected) {
+            if (supabaseConnected && supabaseClient) {
                 try {
-                    await supabaseClient.from('schedule').upsert({
+                    const { error } = await supabaseClient.from('schedule').upsert({
                         day: day,
                         open: schedule[day].open,
                         start_time: schedule[day].start,
                         end_time: schedule[day].end
                     });
-                    console.log('✅ Schedule time updated in Supabase');
+                    
+                    if (error) throw error;
+                    console.log(`✅ ${day} time updated in Supabase`);
                 } catch (e) {
-                    console.log('Schedule time saved to localStorage only');
+                    console.error(`❌ Failed to update ${day} time in Supabase:`, e);
                 }
             }
             
@@ -1734,7 +1756,85 @@
         }
 
         async function saveSchedule() {
-            alert('Schedule saved!');
+            console.log('=== SAVING SCHEDULE ===');
+            
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                alert('Error: Supabase not connected');
+                return;
+            }
+            
+            // Read ALL 7 days
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const scheduleData = [];
+            
+            days.forEach(day => {
+                const isOpen = document.getElementById(day + '-open').checked;
+                const startTime = isOpen ? document.getElementById(day + '-start').value : '09:00';
+                const endTime = isOpen ? document.getElementById(day + '-end').value : '18:00';
+                
+                scheduleData.push({
+                    day: day,
+                    open: isOpen,
+                    start_time: startTime,
+                    end_time: endTime
+                });
+            });
+            
+            console.log('Schedule data to save:', scheduleData);
+            
+            // Save to Supabase
+            if (supabaseConnected) {
+                try {
+                    console.log('Upserting schedule to Supabase...');
+                    const { error } = await supabaseClient
+                        .from('schedule')
+                        .upsert(scheduleData, { onConflict: 'day' });
+                    
+                    if (error) {
+                        console.error('Schedule save failed:', error);
+                        alert('Failed to save schedule: ' + error.message);
+                        return;
+                    }
+                    
+                    console.log('✅ Schedule saved to Supabase successfully');
+                    
+                    // Overwrite localStorage cache
+                    const schedule = {};
+                    scheduleData.forEach(s => {
+                        schedule[s.day] = {
+                            open: s.open,
+                            start: s.start_time,
+                            end: s.end_time
+                        };
+                    });
+                    localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
+                    console.log('✅ localStorage cache updated');
+                    
+                    // Reload from Supabase to confirm
+                    await loadSchedule();
+                    console.log('✅ Schedule reloaded from Supabase');
+                    
+                    alert('Schedule saved successfully!');
+                } catch (error) {
+                    console.error('Schedule save failed:', error);
+                    alert('Error saving schedule: ' + error.message);
+                }
+            } else {
+                // Fallback: save to localStorage only
+                const schedule = {};
+                scheduleData.forEach(s => {
+                    schedule[s.day] = {
+                        open: s.open,
+                        start: s.start_time,
+                        end: s.end_time
+                    };
+                });
+                localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
+                console.log('📦 Schedule saved to localStorage only');
+                alert('Schedule saved locally (Supabase not connected)');
+            }
         }
 
         // ============================================
