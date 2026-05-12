@@ -6,7 +6,6 @@
     <title>153 Cuts | Premium Barbering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -33,7 +32,6 @@
 
         .hidden { display: none !important; }
 
-        /* Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -122,7 +120,6 @@
             cursor: pointer;
         }
 
-        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -173,7 +170,6 @@
             flex-wrap: wrap;
         }
 
-        /* Sections */
         section {
             padding: 6rem 2rem;
             max-width: 1200px;
@@ -197,7 +193,6 @@
             font-size: 1.1rem;
         }
 
-        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -239,7 +234,6 @@
             color: var(--gold);
         }
 
-        /* Booking Section */
         #booking {
             background: var(--dark-gray);
         }
@@ -291,55 +285,6 @@
             min-height: 100px;
         }
 
-        /* Time Slots */
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 0.75rem;
-            margin-top: 0.5rem;
-        }
-
-        .time-slot {
-            padding: 0.75rem;
-            background: var(--dark-gray);
-            border: 1px solid var(--medium-gray);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .time-slot:hover:not(.disabled):not(.unavailable) {
-            border-color: var(--gold);
-            background: rgba(212,175,55,0.1);
-        }
-
-        .time-slot.selected {
-            background: var(--gold);
-            color: var(--dark);
-            border-color: var(--gold);
-            font-weight: 700;
-            transform: scale(0.96);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
-        }
-
-        .time-slot.disabled,
-        .time-slot.unavailable {
-            opacity: 0.35;
-            cursor: not-allowed;
-            text-decoration: line-through;
-            pointer-events: none;
-        }
-
-        .selected-time-display {
-            margin-top: 10px;
-            color: var(--gold);
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        /* Time Select Dropdown */
         #timeSelect {
             width: 100%;
             padding: 0.875rem 1rem;
@@ -367,7 +312,6 @@
             color: var(--white);
         }
 
-        /* Form Message */
         .form-message {
             padding: 1rem;
             border-radius: 8px;
@@ -389,7 +333,6 @@
             color: var(--success);
         }
 
-        /* Closed Message */
         .closed-message {
             background: rgba(245, 158, 11, 0.1);
             border: 1px solid var(--warning);
@@ -399,58 +342,6 @@
             text-align: center;
         }
 
-        /* Local Mode Banner */
-        .local-mode-banner {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid var(--warning);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .local-mode-banner i {
-            color: var(--warning);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .local-mode-banner h3 {
-            color: var(--warning);
-            margin-bottom: 0.5rem;
-        }
-
-        .local-mode-banner p {
-            color: var(--light-gray);
-            font-size: 0.9rem;
-        }
-
-        /* Square CTA */
-        .square-cta {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: var(--medium-gray);
-            border-radius: 16px;
-            border: 1px solid var(--gold);
-        }
-
-        .square-cta i {
-            font-size: 3rem;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        .square-cta h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .square-cta p {
-            color: var(--light-gray);
-            margin-bottom: 1.5rem;
-        }
-
-        /* How It Works */
         .how-it-works {
             margin-top: 2rem;
             padding-top: 2rem;
@@ -492,7 +383,6 @@
             font-size: 0.9rem;
         }
 
-        /* Footer */
         footer {
             background: var(--dark-gray);
             padding: 3rem 2rem;
@@ -504,7 +394,6 @@
             color: var(--light-gray);
         }
 
-        /* Success Modal */
         .modal {
             display: none;
             position: fixed;
@@ -546,7 +435,6 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -577,7 +465,6 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <a href="#" class="logo"><i class="fas fa-cut"></i> 153 Cuts</a>
@@ -585,14 +472,12 @@
             <div class="nav-links">
                 <a href="#services">Services</a>
                 <a href="#booking">Book Now</a>
-                <!-- Admin link controlled by SHOW_ADMIN_LINK config -->
                 <a href="admin.html" target="_blank" id="adminNavLink">Admin</a>
                 <a href="#booking" class="btn-primary">Book Appointment</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <h1>Premium Cuts.<br><span>Zero BS.</span></h1>
@@ -604,7 +489,6 @@
         </div>
     </section>
 
-    <!-- Services -->
     <section id="services">
         <div class="section-title">
             <h2>Our <span>Services</span></h2>
@@ -632,7 +516,6 @@
         </div>
     </section>
 
-    <!-- Booking -->
     <section id="booking">
         <div class="section-title">
             <h2>Book Your <span>Cut</span></h2>
@@ -640,14 +523,6 @@
         </div>
         
         <div class="booking-container">
-            <!-- Local Mode Banner -->
-            <div class="local-mode-banner hidden" id="localModeBanner">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Local Testing Mode</h3>
-                <p>Bookings are stored locally in your browser. For testing only - data won't sync across devices.</p>
-            </div>
-
-            <!-- Booking Form -->
             <form class="booking-form" id="bookingForm">
                 <div class="form-message" id="bookingMessage"></div>
                 
@@ -701,47 +576,34 @@
                 </button>
             </form>
 
-            <!-- Square CTA (shown in square mode) -->
-            <div class="square-cta hidden" id="squareCta">
-                <i class="fab fa-square"></i>
-                <h3>Book Through Square</h3>
-                <p>We use Square Appointments for secure, professional booking. Click below to schedule your cut.</p>
-                <a href="#" class="btn-primary" id="squareBookingLink" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> Book on Square
-                </a>
-            </div>
-
-            <!-- How It Works -->
             <div class="how-it-works">
                 <h3>How It Works</h3>
                 <div class="steps">
                     <div class="step">
                         <div class="step-number">1</div>
-                        <p id="howItWorks1">Select your service and preferred date/time</p>
+                        <p>Select your service and preferred date/time</p>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <p id="howItWorks2">Submit your booking request</p>
+                        <p>Submit your booking request</p>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <p id="howItWorks3">We'll confirm via text or email</p>
+                        <p>We'll confirm via text or email</p>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
-                        <p id="howItWorks4">Show up fresh, leave fresher</p>
+                        <p>Show up fresh, leave fresher</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 153 Cuts. All rights reserved.</p>
     </footer>
 
-    <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content">
             <i class="fas fa-check-circle"></i>
@@ -753,52 +615,18 @@
 
     <script>
         // ============================================
-        // 153 CUTS CONFIGURATION
+        // 153 CUTS - CLEAN BOOKING SYSTEM
         // ============================================
-        // launchMode: 'local' | 'supabase' | 'square'
-        // SHOW_ADMIN_LINK: true | false (hide admin from public nav)
-        // ============================================
-        const SITE_CONFIG = {
-            launchMode: 'supabase',  // 'local' | 'supabase' | 'square'
-            squareBookingUrl: 'https://squareup.com/appointments/book/your-link-here',
-            SHOW_ADMIN_LINK: false   // Set to false to hide admin link from public nav
-        };
-
-        // ============================================
-        // SUPABASE CONFIGURATION
-        // ============================================
+        
         const SUPABASE_URL = 'https://ytjqgxhcwnksnufvcxip.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0anFneGhjd25rc251ZnZjeGlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTE4NzksImV4cCI6MjA5NDA4Nzg3OX0.mxE1xdAkg5nxMHMDDsYs-rQu9pboyWIPRjCTHnwSTT8';
         
-        // Initialize Supabase Client
         let supabaseClient = null;
         let supabaseConnected = false;
-
-        const STORAGE_KEYS = {
-            bookings: 'bookings',
-            schedule: 'schedule',
-            blockedTimes: 'blockedTimes'
-        };
-
-        const defaultSchedule = {
-            monday: { open: false, start: '09:00', end: '18:00' },
-            tuesday: { open: true, start: '09:00', end: '18:00' },
-            wednesday: { open: true, start: '09:00', end: '18:00' },
-            thursday: { open: true, start: '09:00', end: '18:00' },
-            friday: { open: true, start: '09:00', end: '18:00' },
-            saturday: { open: true, start: '09:00', end: '18:00' },
-            sunday: { open: false, start: '09:00', end: '18:00' }
-        };
-
-        const allTimeSlots = [
-            '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-            '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'
-        ];
 
         // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
             await initSupabase();
-            initLaunchMode();
             setupEventListeners();
             
             // Set minimum date to today
@@ -806,117 +634,40 @@
             document.getElementById('date').min = today;
         });
 
+        // ============================================
+        // PHASE 2: CLEAN initSupabase()
+        // ============================================
         async function initSupabase() {
             try {
-                // Check if Supabase library loaded
                 if (typeof supabase === 'undefined' || !supabase.createClient) {
                     console.error('❌ Supabase CDN not loaded');
-                    console.log('📦 Falling back to localStorage mode');
                     supabaseConnected = false;
                     return;
                 }
-                
-                console.log('📦 Supabase CDN loaded, initializing client...');
-                
-                // Create Supabase client using v2 syntax
+
+                console.log('📦 Initializing Supabase...');
+
                 const { createClient } = supabase;
+
                 supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                
-                console.log('✅ Supabase client initialized');
-                
-                // Test connection
-                const { data, error } = await supabaseClient.from('bookings').select('count', { count: 'exact', head: true });
-                    
-                    if (error) {
-                        console.warn('⚠️ Supabase connection test failed:', error.message);
-                        console.log('📦 Falling back to localStorage mode');
-                        supabaseConnected = false;
-                    } else {
-                        console.log('✅ Supabase connected successfully!');
-                    console.log('✅ Supabase ready for bookings');
-                        supabaseConnected = true;
-                    }
-                } else {
-                    console.warn('⚠️ Supabase library not loaded, using localStorage fallback');
+
+                const { error } = await supabaseClient
+                    .from('bookings')
+                    .select('id')
+                    .limit(1);
+
+                if (error) {
+                    console.error('❌ Supabase connection failed:', error);
                     supabaseConnected = false;
+                    return;
                 }
+
+                console.log('✅ Supabase connected');
+                supabaseConnected = true;
+
             } catch (error) {
-                console.error('❌ Supabase initialization error:', error);
-                console.log('📦 Falling back to localStorage mode');
+                console.error('❌ initSupabase error:', error);
                 supabaseConnected = false;
-            }
-        }
-        
-        function initLaunchMode() {
-            // Hide admin link if configured
-            if (!SITE_CONFIG.SHOW_ADMIN_LINK) {
-                const adminLink = document.getElementById('adminNavLink');
-                if (adminLink) adminLink.classList.add('hidden');
-            }
-
-            const isLocalMode = SITE_CONFIG.launchMode === 'local';
-            const isSupabaseMode = SITE_CONFIG.launchMode === 'supabase';
-            const isSquareMode = SITE_CONFIG.launchMode === 'square';
-            
-            if (isLocalMode) {
-                // LOCAL MODE: Show local testing form WITH warning banner
-                document.getElementById('bookingForm').classList.remove('hidden');
-                document.getElementById('squareCta').classList.add('hidden');
-                document.getElementById('localModeBanner').classList.remove('hidden');
-                
-                // Update hero button
-                const heroBtn = document.querySelector('.hero-buttons .btn-primary');
-                if (heroBtn) {
-                    heroBtn.href = '#booking';
-                    heroBtn.textContent = 'Book Appointment';
-                }
-            } else if (isSupabaseMode) {
-                // SUPABASE MODE: Show booking form WITHOUT local warning banner
-                document.getElementById('bookingForm').classList.remove('hidden');
-                document.getElementById('squareCta').classList.add('hidden');
-                document.getElementById('localModeBanner').classList.add('hidden');
-                
-                // Update hero button
-                const heroBtn = document.querySelector('.hero-buttons .btn-primary');
-                if (heroBtn) {
-                    heroBtn.href = '#booking';
-                    heroBtn.textContent = 'Book Appointment';
-                }
-            } else if (isSquareMode) {
-                // SQUARE MODE: Show Square CTA, hide local form
-                document.getElementById('bookingForm').classList.add('hidden');
-                document.getElementById('squareCta').classList.remove('hidden');
-                document.getElementById('localModeBanner').classList.add('hidden');
-                
-                // Update booking info text for Square
-                document.getElementById('howItWorks1').textContent = '1. Click the button below to open Square Appointments';
-                document.getElementById('howItWorks2').textContent = '2. Select your service and preferred time';
-                document.getElementById('howItWorks3').textContent = '3. Complete your booking securely through Square';
-                document.getElementById('howItWorks4').textContent = '4. Show up fresh, leave fresher';
-                
-                // Update Square link
-                const squareLink = document.getElementById('squareBookingLink');
-                if (squareLink && SITE_CONFIG.squareBookingUrl) {
-                    squareLink.href = SITE_CONFIG.squareBookingUrl;
-                }
-                
-                // Update hero button to go directly to Square
-                const heroBtn = document.querySelector('.hero-buttons .btn-primary');
-                if (heroBtn && SITE_CONFIG.squareBookingUrl) {
-                    heroBtn.href = SITE_CONFIG.squareBookingUrl;
-                    heroBtn.target = '_blank';
-                    heroBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Book on Square';
-                }
-            }
-        }
-
-        function initializeForm() {
-            // Set min date to today
-            const dateInput = document.getElementById('date');
-            if (dateInput) {
-                const today = new Date().toISOString().split('T')[0];
-                dateInput.min = today;
-                console.log('📅 Date input initialized with min:', today);
             }
         }
 
@@ -946,231 +697,168 @@
             // Date change - update available times
             document.getElementById('date').addEventListener('change', async () => {
                 clearBookingMessage();
-                await updateAvailableTimes();
+                await renderTimeDropdown();
             });
 
             // Form submission
             document.getElementById('bookingForm').addEventListener('submit', handleBookingSubmit);
         }
 
-        async function updateTimeSlots() {
-            console.log('=== updateTimeSlots running ===');
+        // ============================================
+        // PHASE 4: ONE TRUE AVAILABILITY FUNCTION
+        // ============================================
+        async function getAvailableTimes(date) {
+            console.log('=== getAvailableTimes ===', date);
             
-            const date = document.getElementById('date').value;
-            const closedMessage = document.getElementById('closedMessage');
-            const timeSlotGroup = document.getElementById('timeSlotGroup');
-            
-            // Preserve current selection before updating
-            const currentSelected = document.getElementById('selectedTime').value;
-            console.log('Current selectedTime before update:', currentSelected);
+            // 1. Determine weekday
+            const dayOfWeek = new Date(date + 'T00:00:00')
+                .toLocaleDateString('en-US', { weekday: 'long' })
+                .toLowerCase();
+            console.log('Day:', dayOfWeek);
 
-            if (!date) return;
-
-            // Check if day is open
-            const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-            console.log(`Checking schedule for ${dayOfWeek}...`);
-            
-            // Get schedule - ALWAYS prefer Supabase when connected
-            let schedule = defaultSchedule;
+            // 2. Fetch schedule from Supabase
+            let scheduleRow = null;
             if (supabaseConnected && supabaseClient) {
                 try {
-                    console.log('Fetching schedule from Supabase...');
-                    const { data: scheduleData, error } = await supabaseClient.from('schedule').select('*');
+                    const { data, error } = await supabaseClient
+                        .from('schedule')
+                        .select('*')
+                        .eq('day', dayOfWeek)
+                        .single();
                     
-                    if (error) {
-                        console.error('❌ Failed to fetch schedule:', error);
-                        throw error;
-                    }
-                    
-                    if (scheduleData && scheduleData.length > 0) {
-                        schedule = {};
-                        scheduleData.forEach(s => {
-                            schedule[s.day.toLowerCase()] = {
-                                open: s.open,
-                                start: s.start_time,
-                                end: s.end_time
-                            };
-                        });
-                        console.log('✅ Schedule loaded from Supabase:', schedule);
-                    } else {
-                        console.log('⚠️ No schedule data in Supabase, using defaults');
+                    if (!error && data) {
+                        scheduleRow = data;
                     }
                 } catch (e) {
-                    console.error('❌ Error loading schedule:', e);
-                    // Only fall back to localStorage on error
-                    schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
-                    console.log('📦 Using localStorage fallback');
+                    console.error('Error fetching schedule:', e);
                 }
-            } else {
-                console.log('⚠️ Supabase not connected, using localStorage');
-                schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
             }
-            
-            const daySchedule = schedule[dayOfWeek];
-            console.log(`${dayOfWeek} schedule:`, daySchedule);
 
-            if (!daySchedule || !daySchedule.open) {
-                console.log(`${dayOfWeek} is CLOSED - showing closed message`);
-                closedMessage.classList.remove('hidden');
-                timeSlotGroup.classList.add('hidden');
-                document.getElementById('selectedTime').value = '';
-                return;
+            // 3. If closed or no schedule, return closed
+            if (!scheduleRow || !scheduleRow.open) {
+                console.log('Day is CLOSED');
+                return { closed: true, times: [] };
             }
+
+            // 4. Generate hourly times
+            const times = [];
+            const startMinutes = timeToMinutes(scheduleRow.start_time);
+            const endMinutes = timeToMinutes(scheduleRow.end_time);
             
-            console.log(`${dayOfWeek} is OPEN: ${daySchedule.start} - ${daySchedule.end}`);
-
-            closedMessage.classList.add('hidden');
-            timeSlotGroup.classList.remove('hidden');
-
-            // Get available slots
-            const availableSlots = await getAvailableTimeSlots(date);
-
-            // Update slot states
-            let selectedStillAvailable = false;
-            document.querySelectorAll('.time-slot').forEach(slot => {
-                const time = slot.dataset.time;
-                slot.classList.remove('disabled', 'unavailable', 'selected');
-
-                if (!availableSlots.includes(time)) {
-                    slot.classList.add('disabled');
-                } else if (time === currentSelected) {
-                    // Restore selection if still available
-                    slot.classList.add('selected');
-                    selectedStillAvailable = true;
-                    console.log('✅ Restored selection after slot update:', time);
-                }
-            });
-
-            // Clear selection display if no longer available
-            if (currentSelected && !selectedStillAvailable) {
-                console.log('⚠️ Selected time no longer available, clearing:', currentSelected);
-                document.getElementById('selectedTime').value = '';
-                document.getElementById('selectedTimeDisplay').textContent = '';
+            for (let m = startMinutes; m < endMinutes; m += 60) {
+                times.push(minutesToTime12(m));
             }
-            
-            console.log('=== updateTimeSlots complete ===');
-        }
+            console.log('Generated times:', times);
 
-        async function getAvailableTimeSlots(date) {
+            // 5. Fetch bookings (pending or confirmed)
             let bookings = [];
-            let blockedTimes = [];
-            let schedule = defaultSchedule;
-            
-            // Try Supabase first, fall back to localStorage
-            if (supabaseConnected) {
+            if (supabaseConnected && supabaseClient) {
                 try {
-                    // Get bookings from Supabase - use 'canceled' (not 'cancelled')
-                    const { data: bookingsData, error: bookingsError } = await supabaseClient
+                    const { data, error } = await supabaseClient
                         .from('bookings')
-                        .select('*')
+                        .select('time')
                         .eq('date', date)
-                        .neq('status', 'canceled');
+                        .in('status', ['pending', 'confirmed']);
                     
-                    if (!bookingsError && bookingsData) {
-                        bookings = bookingsData;
+                    if (!error && data) {
+                        bookings = data;
                     }
-                    
-                    // Get blocked times from Supabase
-                    const { data: blockedData, error: blockedError } = await supabaseClient
+                } catch (e) {
+                    console.error('Error fetching bookings:', e);
+                }
+            }
+            console.log('Booked times:', bookings.map(b => b.time));
+
+            // 6. Remove booked times
+            const bookedTimes = bookings.map(b => b.time);
+            let availableTimes = times.filter(t => !bookedTimes.includes(t));
+
+            // 7. Fetch blocked times
+            let blockedTimes = [];
+            if (supabaseConnected && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
                         .from('blocked_times')
                         .select('*')
                         .eq('date', date);
                     
-                    if (!blockedError && blockedData) {
-                        blockedTimes = blockedData;
+                    if (!error && data) {
+                        blockedTimes = data;
                     }
-                    
-                    // Get schedule from Supabase
-                    const { data: scheduleData, error: scheduleError } = await supabaseClient
-                        .from('schedule')
-                        .select('*');
-                    
-                    if (!scheduleError && scheduleData) {
-                        schedule = {};
-                        scheduleData.forEach(s => {
-                            schedule[s.day.toLowerCase()] = {
-                                open: s.open,
-                                start: s.start_time,
-                                end: s.end_time
-                            };
-                        });
-                    }
-                    
-                    console.log('📡 Loaded data from Supabase');
-                } catch (error) {
-                    console.warn('⚠️ Supabase fetch failed, using localStorage:', error);
-                    // Fall back to localStorage
-                    bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-                    blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+                } catch (e) {
+                    console.error('Error fetching blocked times:', e);
                 }
-            } else {
-                // Use localStorage
-                bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-                blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
             }
+            console.log('Blocked times:', blockedTimes);
 
-            const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-            
-            // Use the schedule variable that was already set earlier in the function
-            const daySchedule = schedule[dayOfWeek];
+            // 8. Remove blocked intervals
+            const blockedRanges = blockedTimes.map(b => ({
+                start: timeToMinutes(b.start_time),
+                end: timeToMinutes(b.end_time)
+            }));
 
-            if (!daySchedule || !daySchedule.open) return [];
-
-            const startHour = parseInt(daySchedule.start.split(':')[0]);
-            const startMinute = parseInt(daySchedule.start.split(':')[1]);
-            const endHour = parseInt(daySchedule.end.split(':')[0]);
-            const endMinute = parseInt(daySchedule.end.split(':')[1]);
-
-            // Filter blocked times for this date
-            const blockedForDate = blockedTimes.filter(b => b.date === date);
-
-            return allTimeSlots.filter(slot => {
-                const slotStartMinutes = time12ToMinutes(slot);
-                const slotEndMinutes = slotStartMinutes + 60; // Assume 1-hour slots
-
-                // Check business hours
-                const businessStart = startHour * 60 + startMinute;
-                const businessEnd = endHour * 60 + endMinute;
-                if (slotStartMinutes < businessStart || slotEndMinutes > businessEnd) return false;
-
-                // Check blocked times (compare full time ranges)
-                const isBlocked = blockedForDate.some(blocked => {
-                    const blockedStart = time24ToMinutes(blocked.start_time || blocked.start);
-                    const blockedEnd = time24ToMinutes(blocked.end_time || blocked.end);
-                    // Overlap check: slot overlaps with blocked time if:
-                    // slot start < blocked end AND slot end > blocked start
-                    return slotStartMinutes < blockedEnd && slotEndMinutes > blockedStart;
-                });
-                if (isBlocked) return false;
-
-                // Check existing bookings (handle both Supabase and localStorage formats)
-                const isBooked = bookings.some(b => {
-                    const bookingDate = b.date;
-                    const bookingTime = b.time;
-                    const bookingStatus = b.status;
-                    return bookingDate === date &&
-                        bookingTime === slot &&
-                        (bookingStatus === 'pending' || bookingStatus === 'confirmed');
-                });
-                if (isBooked) return false;
-
+            availableTimes = availableTimes.filter(time => {
+                const slotMinutes = timeToMinutes(convertTo24Hour(time));
+                for (const range of blockedRanges) {
+                    if (slotMinutes >= range.start && slotMinutes < range.end) {
+                        return false;
+                    }
+                }
                 return true;
             });
+
+            console.log('Available times:', availableTimes);
+            return { closed: false, times: availableTimes };
         }
 
-        function time12ToMinutes(time12) {
-            const [time, modifier] = time12.split(' ');
-            let [hours, minutes] = time.split(':').map(Number);
-            if (hours === 12) hours = 0;
-            if (modifier === 'PM') hours += 12;
-            return hours * 60 + (minutes || 0);
+        // ============================================
+        // PHASE 5: ONE DROPDOWN RENDER FUNCTION
+        // ============================================
+        async function renderTimeDropdown() {
+            console.log('=== renderTimeDropdown ===');
+            
+            const date = document.getElementById('date').value;
+            const closedMessage = document.getElementById('closedMessage');
+            const timeSelect = document.getElementById('timeSelect');
+
+            // Clear dropdown
+            timeSelect.innerHTML = '<option value="">Select an available time</option>';
+
+            if (!date) {
+                timeSelect.disabled = true;
+                closedMessage.classList.add('hidden');
+                return;
+            }
+
+            // Get availability
+            const availability = await getAvailableTimes(date);
+
+            // If closed
+            if (availability.closed) {
+                closedMessage.classList.remove('hidden');
+                timeSelect.innerHTML = '<option value="">Closed on this day</option>';
+                timeSelect.disabled = true;
+                return;
+            }
+
+            // If open
+            closedMessage.classList.add('hidden');
+            timeSelect.disabled = false;
+
+            // Populate options
+            availability.times.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                timeSelect.appendChild(option);
+            });
+
+            console.log('Dropdown populated with', availability.times.length, 'times');
         }
 
-        function time24ToMinutes(time24) {
-            const [hours, minutes] = time24.split(':').map(Number);
-            return hours * 60 + minutes;
-        }
-
+        // ============================================
+        // PHASE 6: CLEAN BOOKING SUBMIT
+        // ============================================
         async function handleBookingSubmit(e) {
             e.preventDefault();
             clearBookingMessage();
@@ -1178,177 +866,107 @@
             const form = e.target;
             const submitBtn = document.getElementById('bookingSubmitBtn');
 
-            if (!form.checkValidity()) {
-                form.reportValidity();
+            // 2. Validate
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const service = document.getElementById('service').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('timeSelect').value;
+
+            if (!name || !phone || !service || !date || !time) {
+                showBookingMessage('Please fill in all required fields.');
                 return;
             }
 
-            const selectedTime = document.getElementById('timeSelect').value;
-            if (!selectedTime) {
-                showBookingMessage('Please select an available time.');
-                document.getElementById('timeSelect').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-
-            const formData = new FormData(form);
-            const date = formData.get('date');
-            const time = selectedTime;
-
-            // DEBUG: Log submission start
-            console.log('=== BOOKING SUBMIT DEBUG ===');
-            console.log('Booking submit fired');
-            console.log('Selected time:', time);
-            console.log('Selected date:', date);
+            console.log('=== BOOKING SUBMIT ===');
+            console.log({ name, phone, service, date, time });
 
             try {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Request...';
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-                // Double-check availability before inserting
-                const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-                const schedule = await getScheduleForDate(date);
-                const daySchedule = schedule[dayOfWeek];
-                const availableTimes = await getAvailableTimes(date, daySchedule);
-                
-                console.log('Available times:', availableTimes);
-                if (!availableTimes.includes(time)) {
-                    showBookingMessage('Sorry, this time was just booked. Please select another time.');
-                    await updateAvailableTimes();
+                // 3. Re-check availability
+                const availability = await getAvailableTimes(date);
+                if (availability.closed || !availability.times.includes(time)) {
+                    showBookingMessage('That time is no longer available. Please select another time.');
+                    await renderTimeDropdown();
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Request Appointment';
                     return;
                 }
 
-                // Try to save to Supabase first (source of truth)
-                console.log('Submitting booking to Supabase...');
-                if (supabaseConnected) {
-                    try {
-                        const { data, error } = await supabaseClient
-                            .from('bookings')
-                            .insert([{
-                                client_name: String(formData.get('name') || '').trim(),
-                                phone: String(formData.get('phone') || '').trim(),
-                                email: String(formData.get('email') || '').trim(),
-                                service: formData.get('service'),
-                                date: date,
-                                time: time,
-                                notes: String(formData.get('notes') || '').trim(),
-                                status: 'pending'
-                            }])
-                            .select();
-                        
-                        if (error) {
-                            console.error('Booking insert failed:', error);
-                            showBookingMessage('Booking failed: ' + error.message);
-                            throw error;
-                        }
-                        
-                        // SUCCESS: Use Supabase returned data (includes real ID)
-                        console.log('✅ Booking insert success:', data);
-                        
-                        // Cache the Supabase row in localStorage (overwrite, don't append)
-                        const supabaseBooking = data[0];
-                        const localCache = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-                        
-                        // Remove any existing booking with same date/time (prevent duplicates)
-                        const filteredCache = localCache.filter(b => 
-                            !(b.date === supabaseBooking.date && b.time === supabaseBooking.time)
-                        );
-                        
-                        // Add the Supabase booking (with real ID)
-                        filteredCache.push({
-                            id: supabaseBooking.id,
-                            name: supabaseBooking.client_name,
-                            phone: supabaseBooking.phone,
-                            email: supabaseBooking.email,
-                            service: supabaseBooking.service,
-                            date: supabaseBooking.date,
-                            time: supabaseBooking.time,
-                            notes: supabaseBooking.notes,
-                            status: supabaseBooking.status,
-                            createdAt: supabaseBooking.created_at
-                        });
-                        
-                        localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(filteredCache));
-                        console.log('📦 Cached Supabase booking in localStorage');
-                        
-                    } catch (error) {
-                        console.error('❌ Supabase save failed:', error);
-                        console.error('Error details:', error.message, error.code);
-                        showBookingMessage('Error: ' + error.message);
-                        console.log('📦 Falling back to localStorage only');
-                        
-                        // FALLBACK: Save to localStorage only
-                        const fallbackBooking = {
-                            id: 'local_' + Date.now(),
-                            name: String(formData.get('name') || '').trim(),
-                            phone: String(formData.get('phone') || '').trim(),
-                            email: String(formData.get('email') || '').trim(),
-                            service: formData.get('service'),
-                            date: date,
-                            time: time,
-                            notes: String(formData.get('notes') || '').trim(),
-                            status: 'pending',
-                            createdAt: new Date().toISOString()
-                        };
-                        
-                        const localBookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-                        localBookings.push(fallbackBooking);
-                        localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(localBookings));
-                        
-                        // Show warning that we're in fallback mode
-                        console.warn('⚠️ Booking saved to localStorage only - will not sync across devices');
-                    }
-                } else {
-                    // NO SUPABASE: Save to localStorage only
-                    const localBooking = {
-                        id: 'local_' + Date.now(),
-                        name: String(formData.get('name') || '').trim(),
-                        phone: String(formData.get('phone') || '').trim(),
-                        email: String(formData.get('email') || '').trim(),
-                        service: formData.get('service'),
+                // 4. Insert into Supabase
+                if (!supabaseConnected || !supabaseClient) {
+                    showBookingMessage('Booking system unavailable. Please try again later.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Request Appointment';
+                    return;
+                }
+
+                const { data, error } = await supabaseClient
+                    .from('bookings')
+                    .insert([{
+                        client_name: name,
+                        phone: phone,
+                        email: document.getElementById('email').value.trim(),
+                        service: service,
                         date: date,
                         time: time,
-                        notes: String(formData.get('notes') || '').trim(),
-                        status: 'pending',
-                        createdAt: new Date().toISOString()
-                    };
-                    
-                    const localBookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-                    localBookings.push(localBooking);
-                    localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(localBookings));
-                    
-                    console.log('📦 Saved to localStorage (Supabase not connected)');
+                        notes: document.getElementById('notes').value.trim(),
+                        status: 'pending'
+                    }])
+                    .select();
+
+                // 5. Show REAL error
+                if (error) {
+                    console.error('Booking insert failed:', error);
+                    showBookingMessage('Booking failed: ' + error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Request Appointment';
+                    return;
                 }
 
-                // Show success (different message if in fallback mode)
-                const successModal = document.getElementById('successModal');
-                const successMessage = successModal.querySelector('p');
-                
-                if (supabaseConnected) {
-                    successMessage.textContent = "Thanks for booking with 153 Cuts. We'll confirm your appointment soon.";
-                } else {
-                    successMessage.textContent = "Thanks for booking! Note: You're in local mode - the barber will need to check this device for your booking.";
-                }
-                
-                successModal.classList.add('active');
-                console.log('Booking success, refreshing occupied slots');
+                console.log('✅ Booking saved:', data);
 
-                // Reset form and clear selection
+                // 6. Success
+                document.getElementById('successModal').classList.add('active');
                 form.reset();
-                document.getElementById('timeSelect').innerHTML = '<option value="">Select an available time</option>';
-                document.getElementById('timeSelect').disabled = true;
-                
-                // Refresh available times to show newly booked time as unavailable
-                await updateAvailableTimes();
+                timeSelect.innerHTML = '<option value="">Select an available time</option>';
+                timeSelect.disabled = true;
+                await renderTimeDropdown();
 
             } catch (error) {
                 console.error('Booking error:', error);
-                showBookingMessage('There was an error saving your booking. Please try again.');
+                showBookingMessage('Booking failed: ' + error.message);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Request Appointment';
             }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function timeToMinutes(time24) {
+            const [hours, minutes] = time24.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function minutesToTime12(minutes) {
+            let h = Math.floor(minutes / 60);
+            const m = minutes % 60;
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12;
+            h = h ? h : 12;
+            return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+        }
+
+        function convertTo24Hour(time12) {
+            const [time, modifier] = time12.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
+            if (modifier === 'PM' && hours !== 12) hours += 12;
+            if (modifier === 'AM' && hours === 12) hours = 0;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
         }
 
         function showBookingMessage(message, type = 'error') {
@@ -1372,161 +990,6 @@
                 closeModal();
             }
         });
-
-        // Helper function to get schedule for a date
-        async function getScheduleForDate(date) {
-            let schedule = defaultSchedule;
-            
-            if (supabaseConnected && supabaseClient) {
-                try {
-                    const { data: scheduleData, error } = await supabaseClient.from('schedule').select('*');
-                    if (!error && scheduleData && scheduleData.length > 0) {
-                        schedule = {};
-                        scheduleData.forEach(s => {
-                            schedule[s.day.toLowerCase()] = {
-                                open: s.open,
-                                start: s.start_time,
-                                end: s.end_time
-                            };
-                        });
-                    }
-                } catch (e) {
-                    console.error('Error fetching schedule:', e);
-                }
-            }
-            
-            return schedule;
-        }
-
-        // Helper function to get available times for a date
-        async function getAvailableTimes(date, daySchedule) {
-            let bookings = [];
-            let blockedTimes = [];
-            
-            // Try Supabase first
-            if (supabaseConnected && supabaseClient) {
-                try {
-                    // Get bookings (pending or confirmed only)
-                    const { data: bookingsData, error: bookingsError } = await supabaseClient
-                        .from('bookings')
-                        .select('*')
-                        .eq('date', date)
-                        .in('status', ['pending', 'confirmed']);
-                    
-                    if (!bookingsError && bookingsData) {
-                        bookings = bookingsData;
-                    }
-                    
-                    // Get blocked times
-                    const { data: blockedData, error: blockedError } = await supabaseClient
-                        .from('blocked_times')
-                        .select('*')
-                        .eq('date', date);
-                    
-                    if (!blockedError && blockedData) {
-                        blockedTimes = blockedData;
-                    }
-                } catch (e) {
-                    console.error('Error fetching from Supabase:', e);
-                }
-            }
-            
-            // Fallback to localStorage
-            if (bookings.length === 0) {
-                bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]')
-                    .filter(b => b.date === date && ['pending', 'confirmed'].includes(b.status));
-            }
-            
-            if (blockedTimes.length === 0) {
-                blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]')
-                    .filter(b => b.date === date);
-            }
-            
-            // Generate all possible times (1-hour intervals)
-            const allTimes = [];
-            const startMinutes = timeToMinutes(daySchedule.start);
-            const endMinutes = timeToMinutes(daySchedule.end);
-            
-            for (let minutes = startMinutes; minutes < endMinutes; minutes += 60) {
-                allTimes.push(minutesToTime12(minutes));
-            }
-            
-            // Get booked times
-            const bookedTimes = bookings.map(b => b.time);
-            
-            // Get blocked time ranges
-            const blockedRanges = blockedTimes.map(b => ({
-                start: timeToMinutes(b.start || b.start_time),
-                end: timeToMinutes(b.end || b.end_time)
-            }));
-            
-            // Filter available times
-            return allTimes.filter(time => {
-                // Check if booked
-                if (bookedTimes.includes(time)) return false;
-                
-                // Check if blocked
-                const slotMinutes = timeToMinutes(convertTo24Hour(time));
-                for (const range of blockedRanges) {
-                    if (slotMinutes >= range.start && slotMinutes < range.end) {
-                        return false;
-                    }
-                }
-                
-                return true;
-            });
-        }
-
-        // Update available times dropdown
-        async function updateAvailableTimes() {
-            console.log('=== updateAvailableTimes running ===');
-            
-            const date = document.getElementById('date').value;
-            const closedMessage = document.getElementById('closedMessage');
-            const timeSelect = document.getElementById('timeSelect');
-
-            if (!date) {
-                timeSelect.innerHTML = '<option value="">Select an available time</option>';
-                timeSelect.disabled = true;
-                return;
-            }
-
-            // Check if day is open
-            const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-            console.log(`Checking schedule for ${dayOfWeek}...`);
-            
-            const schedule = await getScheduleForDate(date);
-            const daySchedule = schedule[dayOfWeek];
-            
-            console.log(`${dayOfWeek} schedule:`, daySchedule);
-
-            if (!daySchedule || !daySchedule.open) {
-                console.log(`${dayOfWeek} is CLOSED`);
-                closedMessage.classList.remove('hidden');
-                timeSelect.innerHTML = '<option value="">Closed on this day</option>';
-                timeSelect.disabled = true;
-                return;
-            }
-            
-            console.log(`${dayOfWeek} is OPEN: ${daySchedule.start} - ${daySchedule.end}`);
-            closedMessage.classList.add('hidden');
-            timeSelect.disabled = false;
-
-            // Get available times
-            const availableTimes = await getAvailableTimes(date, daySchedule);
-            console.log('Available times:', availableTimes);
-
-            // Populate dropdown
-            timeSelect.innerHTML = '<option value="">Select an available time</option>';
-            availableTimes.forEach(time => {
-                const option = document.createElement('option');
-                option.value = time;
-                option.textContent = time;
-                timeSelect.appendChild(option);
-            });
-            
-            console.log('=== updateAvailableTimes complete ===');
-        }
     </script>
 </body>
 </html>
