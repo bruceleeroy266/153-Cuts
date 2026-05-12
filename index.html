@@ -6,6 +6,8 @@
     <title>153 Cuts | Premium Barbering</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --gold: #D4AF37;
@@ -28,6 +30,8 @@
             color: var(--white);
             line-height: 1.6;
         }
+
+        .hidden { display: none !important; }
 
         /* Navigation */
         nav {
@@ -99,9 +103,9 @@
             border-radius: 50px;
             font-weight: 600;
             text-decoration: none;
+            transition: all 0.3s;
             border: 2px solid var(--gold);
             cursor: pointer;
-            transition: all 0.3s;
         }
 
         .btn-secondary:hover {
@@ -113,36 +117,12 @@
             display: none;
             background: none;
             border: none;
-            color: var(--gold);
+            color: var(--white);
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0.5rem;
         }
 
-        @media (max-width: 768px) {
-            .mobile-menu-btn { display: block; }
-
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                background: var(--dark-gray);
-                flex-direction: column;
-                padding: 1rem;
-                gap: 1rem;
-                border-bottom: 1px solid var(--medium-gray);
-                transform: translateY(-150%);
-                transition: transform 0.3s ease;
-                z-index: 999;
-            }
-
-            .nav-links.active { transform: translateY(0); }
-            .nav-links a { padding: 0.75rem 1rem; width: 100%; text-align: center; }
-            .nav-links .btn-primary { width: 100%; text-align: center; }
-        }
-
-        /* Hero Section */
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -150,7 +130,7 @@
             justify-content: center;
             text-align: center;
             padding: 8rem 2rem 4rem;
-            background: linear-gradient(135deg, var(--dark-gray) 0%, var(--dark) 50%, #1a1510 100%);
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-gray) 100%);
             position: relative;
             overflow: hidden;
         }
@@ -158,9 +138,11 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(212,175,55,0.1) 0%, transparent 50%);
         }
 
         .hero-content {
@@ -169,22 +151,8 @@
             max-width: 800px;
         }
 
-        .hero-badge {
-            display: inline-block;
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 800;
             margin-bottom: 1rem;
             line-height: 1.1;
@@ -196,9 +164,6 @@
             font-size: 1.25rem;
             color: var(--light-gray);
             margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .hero-buttons {
@@ -208,45 +173,31 @@
             flex-wrap: wrap;
         }
 
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 4rem;
-            flex-wrap: wrap;
-        }
-
-        .stat { text-align: center; }
-        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
-        .stat-label { color: var(--light-gray); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Section Styles */
-        section { padding: 6rem 2rem; }
-        .container { max-width: 1200px; margin: 0 auto; }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .section-header h2 span { color: var(--gold); }
-
-        .section-header p {
-            color: var(--light-gray);
-            font-size: 1.125rem;
-            max-width: 600px;
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* Services Section */
-        .services { background: var(--dark-gray); }
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
 
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title h2 span { color: var(--gold); }
+
+        .section-title p {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+        }
+
+        /* Services */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -254,68 +205,49 @@
         }
 
         .service-card {
-            background: var(--medium-gray);
+            background: var(--dark-gray);
             border-radius: 16px;
             padding: 2rem;
-            border: 1px solid transparent;
+            border: 1px solid var(--medium-gray);
             transition: all 0.3s;
         }
 
         .service-card:hover {
-            border-color: var(--gold);
             transform: translateY(-4px);
+            border-color: var(--gold);
         }
 
-        .service-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(212, 175, 55, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
+        .service-card i {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
         }
 
-        .service-icon i { font-size: 1.5rem; color: var(--gold); }
-        .service-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
-        .service-card p { color: var(--light-gray); font-size: 0.95rem; margin-bottom: 1rem; }
-        .service-price { font-size: 1.5rem; font-weight: 700; color: var(--gold); }
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+
+        .service-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
 
         /* Booking Section */
-        .booking { background: linear-gradient(135deg, var(--dark) 0%, var(--dark-gray) 100%); }
+        #booking {
+            background: var(--dark-gray);
+        }
 
         .booking-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
+            max-width: 600px;
+            margin: 0 auto;
         }
-
-        @media (max-width: 768px) {
-            .booking-container { grid-template-columns: 1fr; }
-        }
-
-        .booking-info h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-        .booking-info p { color: var(--light-gray); margin-bottom: 1.5rem; }
-
-        .policy-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--danger);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .policy-box h4 {
-            color: var(--danger);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .policy-box p { color: #ccc; font-size: 0.9rem; margin: 0; }
 
         .booking-form {
             background: var(--medium-gray);
@@ -324,7 +256,9 @@
             border: 1px solid var(--gold);
         }
 
-        .form-group { margin-bottom: 1.5rem; }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
 
         .form-group label {
             display: block;
@@ -336,13 +270,13 @@
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1rem;
             background: var(--dark-gray);
             border: 1px solid var(--medium-gray);
             border-radius: 8px;
             color: var(--white);
             font-size: 1rem;
-            transition: border-color 0.3s;
+            font-family: inherit;
         }
 
         .form-group input:focus,
@@ -357,15 +291,12 @@
             min-height: 100px;
         }
 
+        /* Time Slots */
         .time-slots {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
             margin-top: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .time-slots { grid-template-columns: repeat(2, 1fr); }
         }
 
         .time-slot {
@@ -376,136 +307,157 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
         }
 
-        .time-slot:hover:not(.disabled) { border-color: var(--gold); }
+        .time-slot:hover:not(.disabled):not(.unavailable) {
+            border-color: var(--gold);
+            background: rgba(212,175,55,0.1);
+        }
 
         .time-slot.selected {
             background: var(--gold);
             color: var(--dark);
             border-color: var(--gold);
+            font-weight: 600;
         }
 
         .time-slot.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            text-decoration: line-through;
-            background: var(--medium-gray);
-        }
-
-        .time-slot.unavailable {
             opacity: 0.3;
             cursor: not-allowed;
             text-decoration: line-through;
-            background: var(--medium-gray);
         }
 
-        .submit-btn { width: 100%; padding: 1rem; font-size: 1.1rem; }
+        .time-slot.unavailable {
+            background: var(--danger);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
 
+        /* Form Message */
         .form-message {
-            display: none;
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
-            font-size: 0.95rem;
+            display: none;
         }
 
         .form-message.active { display: block; }
-        .form-message.error { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); color: #fecaca; }
-        .form-message.success { background: rgba(34, 197, 94, 0.1); border: 1px solid var(--success); color: #bbf7d0; }
-        
-        .launch-mode-banner {
+
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .form-message.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        /* Closed Message */
+        .closed-message {
             background: rgba(245, 158, 11, 0.1);
             border: 1px solid var(--warning);
-            border-radius: 8px;
+            color: var(--warning);
             padding: 1rem;
-            margin-bottom: 1rem;
+            border-radius: 8px;
             text-align: center;
         }
-        
-        .launch-mode-banner i { color: var(--warning); margin-right: 0.5rem; }
-        .launch-mode-banner p { margin: 0; color: var(--warning); font-size: 0.9rem; }
-        
+
+        /* Local Mode Banner */
+        .local-mode-banner {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .local-mode-banner i {
+            color: var(--warning);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .local-mode-banner h3 {
+            color: var(--warning);
+            margin-bottom: 0.5rem;
+        }
+
+        .local-mode-banner p {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Square CTA */
         .square-cta {
+            text-align: center;
+            padding: 3rem 2rem;
             background: var(--medium-gray);
             border-radius: 16px;
-            padding: 3rem 2rem;
             border: 1px solid var(--gold);
-            text-align: center;
         }
-        
+
         .square-cta i {
             font-size: 3rem;
             color: var(--gold);
             margin-bottom: 1rem;
         }
-        
+
         .square-cta h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
-        
+
         .square-cta p {
             color: var(--light-gray);
             margin-bottom: 1.5rem;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
         }
-        
-        .square-cta .btn-primary {
-            display: inline-block;
-            font-size: 1.1rem;
-            padding: 1rem 2rem;
+
+        /* How It Works */
+        .how-it-works {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--medium-gray);
         }
-        
-        .closed-message {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid var(--warning);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            color: var(--warning);
+
+        .how-it-works h3 {
             text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
         }
 
-        /* TikTok Section */
-        .tiktok { background: var(--dark-gray); }
-
-        .tiktok-grid {
+        .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
         }
 
-        .tiktok-card {
-            background: var(--medium-gray);
-            border-radius: 16px;
-            overflow: hidden;
-            aspect-ratio: 9/16;
-            max-height: 500px;
+        .step {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--medium-gray);
+            font-weight: 700;
+            margin: 0 auto 1rem;
         }
 
-        /* Contact Section */
-        .contact { background: var(--dark); }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            text-align: center;
+        .step p {
+            color: var(--light-gray);
+            font-size: 0.9rem;
         }
-
-        .contact-item { padding: 2rem; }
-        .contact-item i { font-size: 2rem; color: var(--gold); margin-bottom: 1rem; }
-        .contact-item h3 { margin-bottom: 0.5rem; }
-        .contact-item p { color: var(--light-gray); }
-        .contact-item a { color: var(--gold); text-decoration: none; }
 
         /* Footer */
         footer {
@@ -515,66 +467,80 @@
             border-top: 1px solid var(--medium-gray);
         }
 
-        footer p { color: var(--light-gray); }
-
-        .admin-link {
+        footer p {
             color: var(--light-gray);
-            text-decoration: none;
-            font-size: 0.875rem;
-            opacity: 0.5;
         }
 
-        .admin-link:hover { opacity: 1; color: var(--gold); }
-
-        /* Modal */
+        /* Success Modal */
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(0,0,0,0.8);
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 1rem;
         }
 
         .modal.active { display: flex; }
 
         .modal-content {
-            background: var(--medium-gray);
+            background: var(--dark-gray);
             border-radius: 16px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 100%;
+            padding: 2.5rem;
+            max-width: 400px;
+            text-align: center;
             border: 1px solid var(--gold);
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-header h3 { margin: 0; }
-
-        .close-modal {
-            background: none;
-            border: none;
-            color: var(--light-gray);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .close-modal:hover { color: var(--gold); }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
+        .modal-content i {
+            font-size: 4rem;
+            color: var(--success);
             margin-bottom: 1rem;
         }
 
-        .alert-success { background: rgba(34, 197, 94, 0.1); border: 1px solid var(--success); color: var(--success); }
+        .modal-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            color: var(--light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark-gray);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                border-top: 1px solid var(--medium-gray);
+            }
+
+            .nav-links.active { display: flex; }
+
+            .mobile-menu-btn { display: block; }
+
+            .hero { padding: 6rem 1.5rem 3rem; }
+
+            section { padding: 4rem 1.5rem; }
+
+            .hero-buttons { flex-direction: column; }
+
+            .hero-buttons .btn-primary,
+            .hero-buttons .btn-secondary { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -582,130 +548,113 @@
     <nav>
         <div class="nav-container">
             <a href="#" class="logo"><i class="fas fa-cut"></i> 153 Cuts</a>
+            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
             <div class="nav-links">
                 <a href="#services">Services</a>
                 <a href="#booking">Book Now</a>
-                <a href="#tiktok">Work</a>
-                <a href="#contact">Contact</a>
-                <a href="admin.html" class="btn-primary">Admin</a>
+                <!-- Admin link controlled by SHOW_ADMIN_LINK config -->
+                <a href="admin.html" target="_blank" id="adminNavLink">Admin</a>
+                <a href="#booking" class="btn-primary">Book Appointment</a>
             </div>
-            <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
-            <span class="hero-badge">Premium Barbering</span>
-            <h1>Precision Cuts. <span>Timeless Style.</span></h1>
-            <p>Experience the art of barbering. Clean fades, sharp lines, and the attention to detail you deserve.</p>
-            <p style="font-size: 0.9rem; color: var(--gold); margin-top: 0.5rem;"><i class="fas fa-graduation-cap"></i> Student Barber - Quality cuts at student prices</p>
+            <h1>Premium Cuts.<br><span>Zero BS.</span></h1>
+            <p>153 Cuts delivers precision barbering for the modern man. Clean lines, sharp fades, and the confidence that comes with looking your best.</p>
             <div class="hero-buttons">
                 <a href="#booking" class="btn-primary">Book Appointment</a>
                 <a href="#services" class="btn-secondary">View Services</a>
             </div>
-            <div class="hero-stats">
-                <div class="stat"><div class="stat-number">500+</div><div class="stat-label">Happy Clients</div></div>
-                <div class="stat"><div class="stat-number">5+</div><div class="stat-label">Years Experience</div></div>
-                <div class="stat"><div class="stat-number">153</div><div class="stat-label">Cuts & Counting</div></div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services">
+        <div class="section-title">
+            <h2>Our <span>Services</span></h2>
+            <p>Quality cuts at fair prices. No surprises, no upsells.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fas fa-cut"></i>
+                <h3>Haircut</h3>
+                <p>Precision cut tailored to your style. Includes consultation, wash, and style.</p>
+                <div class="service-price">$15</div>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-user"></i>
+                <h3>Beard Trim</h3>
+                <p>Shape and sculpt your beard for a clean, defined look.</p>
+                <div class="service-price">$10</div>
+            </div>
+            <div class="service-card">
+                <i class="fas fa-star"></i>
+                <h3>Haircut + Beard</h3>
+                <p>The full package. Fresh cut and beard trim for the complete transformation.</p>
+                <div class="service-price">$22</div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <div class="section-header">
-                <h2>Our <span>Services</span></h2>
-                <p>Quality cuts at fair prices. Every service includes a consultation to ensure you get exactly what you want.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-cut"></i></div>
-                    <h3>Haircut</h3>
-                    <p>Precision cut with clippers and shears. Includes lineup and styling.</p>
-                    <div class="service-price">$15</div>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-user"></i></div>
-                    <h3>Beard Trim</h3>
-                    <p>Shape and sculpt your beard. Clean edges and detailing.</p>
-                    <div class="service-price">$10</div>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-star"></i></div>
-                    <h3>Haircut + Beard</h3>
-                    <p>The full package. Fresh cut and beard sculpting.</p>
-                    <div class="service-price">$22</div>
-                </div>
-            </div>
+    <!-- Booking -->
+    <section id="booking">
+        <div class="section-title">
+            <h2>Book Your <span>Cut</span></h2>
+            <p>Choose your service, pick a time, and we'll see you in the chair.</p>
         </div>
-    </section>
-
-    <!-- Booking Section -->
-    <section id="booking" class="booking">
-        <div class="container">
-            <div class="section-header">
-                <h2>Book Your <span>Appointment</span></h2>
-                <p>Choose your service and preferred time. I'll review and confirm your booking.</p>
+        
+        <div class="booking-container">
+            <!-- Local Mode Banner -->
+            <div class="local-mode-banner hidden" id="localModeBanner">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Local Testing Mode</h3>
+                <p>Bookings are stored locally in your browser. For testing only - data won't sync across devices.</p>
             </div>
-            <div class="booking-container">
-                <div class="booking-info" id="bookingInfo">
-                    <h3>How It Works</h3>
-                    <p id="howItWorks1">1. Select your service and preferred date/time</p>
-                    <p id="howItWorks2">2. Submit your booking request</p>
-                    <p id="howItWorks3">3. I'll review and confirm availability</p>
-                    <p id="howItWorks4">4. Show up fresh, leave fresher</p>
 
-                    <div class="policy-box" id="noShowPolicy">
-                        <h4><i class="fas fa-exclamation-triangle"></i> No-Show Policy</h4>
-                        <p>Please cancel as early as possible if you cannot make it. Repeated no-shows may limit future bookings.</p>
-                    </div>
-
-                    <div class="policy-box" style="background: rgba(34, 197, 94, 0.1); border-color: #22c55e; margin-top: 1rem;">
-                        <h4 style="color: #22c55e;"><i class="fas fa-dollar-sign"></i> Payment</h4>
-                        <p style="font-size: 0.85rem;">Cash preferred. Payment due at time of service.</p>
-                    </div>
+            <!-- Booking Form -->
+            <form class="booking-form" id="bookingForm">
+                <div class="form-message" id="bookingMessage"></div>
+                
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe">
                 </div>
-
-                <!-- Local Testing Form (hidden in Square mode) -->
-                <form class="booking-form" id="bookingForm" action="javascript:void(0);" autocomplete="on">
-                    <div id="localModeBanner" class="launch-mode-banner hidden">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <p><strong>Local Testing Mode:</strong> Bookings only save in this browser and will not sync.</p>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="john@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="service">Service *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select a service</option>
+                        <option value="Haircut">Haircut - $15</option>
+                        <option value="Beard Trim">Beard Trim - $10</option>
+                        <option value="Haircut + Beard">Haircut + Beard - $22</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Date *</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Select Time *</label>
+                    <input type="hidden" id="selectedTime" name="time" required>
+                    <div class="closed-message hidden" id="closedMessage">
+                        <i class="fas fa-calendar-times"></i> We're closed on this day. Please select another date.
                     </div>
-                    
-                    <div id="closedMessage" class="closed-message hidden">
-                        <i class="fas fa-calendar-times"></i> Sorry, we're closed on this day. Please select another date.
-                    </div>
-
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number *</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="service">Service *</label>
-                        <select id="service" name="service" required>
-                            <option value="">Select a service</option>
-                            <option value="Haircut">Haircut - $15</option>
-                            <option value="Beard Trim">Beard Trim - $10</option>
-                            <option value="Haircut + Beard">Haircut + Beard - $22</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Preferred Date *</label>
-                        <input type="date" id="date" name="date" required>
-                    </div>
-                    <div class="form-group" id="timeSlotGroup">
-                        <label>Preferred Time *</label>
+                    <div id="timeSlotGroup">
                         <div class="time-slots" id="timeSlots">
                             <div class="time-slot" data-time="9:00 AM">9:00 AM</div>
                             <div class="time-slot" data-time="10:00 AM">10:00 AM</div>
@@ -717,77 +666,49 @@
                             <div class="time-slot" data-time="4:00 PM">4:00 PM</div>
                             <div class="time-slot" data-time="5:00 PM">5:00 PM</div>
                         </div>
-                        <input type="hidden" id="selectedTime" name="time">
                     </div>
-                    <div class="form-group">
-                        <label for="notes">Notes (optional)</label>
-                        <textarea id="notes" name="notes" placeholder="Any specific requests or details..."></textarea>
-                    </div>
-                    <div id="bookingMessage" class="form-message" role="alert"></div>
-                    <button type="submit" class="btn-primary submit-btn" id="bookingSubmitBtn">
-                        <i class="fas fa-calendar-check"></i> Request Appointment
-                    </button>
-                </form>
+                </div>
                 
-                <!-- Square Booking CTA (shown in Square mode) -->
-                <div class="square-cta hidden" id="squareCta">
-                    <i class="fas fa-calendar-check"></i>
-                    <h3>Book Your Appointment</h3>
-                    <p>Booking is handled securely through Square Appointments. Click below to view availability and schedule your cut.</p>
-                    <a href="#" class="btn-primary" id="squareBookingLink" target="_blank">
-                        <i class="fas fa-external-link-alt"></i> Book on Square
-                    </a>
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" name="notes" placeholder="Any special requests..."></textarea>
                 </div>
-            </div>
-        </div>
-    </section>
+                
+                <button type="submit" class="btn-primary" id="bookingSubmitBtn" style="width: 100%;">
+                    <i class="fas fa-calendar-check"></i> Request Appointment
+                </button>
+            </form>
 
-    <!-- TikTok Section -->
-    <section id="tiktok" class="tiktok">
-        <div class="container">
-            <div class="section-header">
-                <h2>Recent <span>Work</span></h2>
-                <p>Follow @Flying_oppusit on TikTok for daily cuts and transformations.</p>
+            <!-- Square CTA (shown in square mode) -->
+            <div class="square-cta hidden" id="squareCta">
+                <i class="fab fa-square"></i>
+                <h3>Book Through Square</h3>
+                <p>We use Square Appointments for secure, professional booking. Click below to schedule your cut.</p>
+                <a href="#" class="btn-primary" id="squareBookingLink" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Book on Square
+                </a>
             </div>
-            <div class="tiktok-grid">
-                <div class="tiktok-card" style="background: var(--dark-gray); position: relative;">
-                    <a href="https://tiktok.com/@Flying_oppusit" target="_blank" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; text-decoration: none; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.4) 100%);">
-                        <i class="fab fa-tiktok" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));"></i>
-                        <p style="color: white; font-weight: 700; font-size: 1.25rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">@Flying_oppusit</p>
-                        <p style="color: var(--gold); font-size: 0.9rem; margin-top: 0.5rem;">Click to follow</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2>Get In <span>Touch</span></h2>
-                <p>Questions? Reach out directly.</p>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <h3>Location</h3>
-                    <p>Oklahoma City, OK</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <h3>Phone</h3>
-                    <p><a href="tel:+19044809422">(904) 480-9422</a></p>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-clock"></i>
-                    <h3>Hours</h3>
-                    <p>Tue - Sat: 9AM - 6PM</p>
-                </div>
-                <div class="contact-item">
-                    <i class="fab fa-tiktok"></i>
-                    <h3>Follow</h3>
-                    <p>@Flying_oppusit</p>
+            <!-- How It Works -->
+            <div class="how-it-works">
+                <h3>How It Works</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <p id="howItWorks1">Select your service and preferred date/time</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <p id="howItWorks2">Submit your booking request</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <p id="howItWorks3">We'll confirm via text or email</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <p id="howItWorks4">Show up fresh, leave fresher</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -796,44 +717,39 @@
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 153 Cuts. All rights reserved.</p>
-        <p style="margin-top: 1rem;"><a href="admin.html" class="admin-link">Admin Login</a></p>
     </footer>
 
     <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Booking Request Submitted</h3>
-                <button class="close-modal" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> Your appointment request has been submitted.
-            </div>
-            <p>I will review it and confirm availability. You'll receive a confirmation shortly.</p>
-            <button class="btn-primary" onclick="closeModal()" style="margin-top: 1rem; width: 100%;">Got it</button>
+            <i class="fas fa-check-circle"></i>
+            <h3>Booking Requested!</h3>
+            <p>Thanks for booking with 153 Cuts. We'll confirm your appointment soon.</p>
+            <button class="btn-primary" onclick="closeModal()">Got it</button>
         </div>
     </div>
 
     <script>
         // ============================================
-        // 153 CUTS SITE CONFIGURATION
+        // 153 CUTS CONFIGURATION
         // ============================================
-        // IMPORTANT: Set launchMode before deploying to Vercel
-        // "square" = Production mode (uses Square Appointments)
-        // "local"  = Testing mode only (localStorage, no sync)
+        // launchMode: 'local' | 'supabase' | 'square'
+        // SHOW_ADMIN_LINK: true | false (hide admin from public nav)
         // ============================================
-
         const SITE_CONFIG = {
-            launchMode: "square", // "square" or "local"
-            squareBookingUrl: "https://squareup.com/appointments/book/EXAMPLE" // REPLACE WITH YOUR SQUARE LINK
+            launchMode: 'supabase',  // 'local' | 'supabase' | 'square'
+            squareBookingUrl: 'https://squareup.com/appointments/book/your-link-here',
+            SHOW_ADMIN_LINK: false   // Set to false to hide admin link from public nav
         };
 
         // ============================================
-        // 153 CUTS BOOKING SYSTEM
+        // SUPABASE CONFIGURATION
         // ============================================
-        // NOTE: localStorage is browser-only and does NOT sync across devices.
-        // For production with real bookings, use SITE_CONFIG.launchMode = "square"
-        // ============================================
+        const SUPABASE_URL = 'https://ytjqgxhcwnksnufvcxip.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0anFneGhjd25rc251ZnZjeGlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTE4NzksImV4cCI6MjA5NDA4Nzg3OX0.mxE1xdAkg5nxMHMDDsYs-rQu9pboyWIPRjCTHnwSTT8';
+        
+        let supabase;
+        let supabaseConnected = false;
 
         const STORAGE_KEYS = {
             bookings: 'bookings',
@@ -851,20 +767,62 @@
             sunday: { open: false, start: '09:00', end: '18:00' }
         };
 
-        const allTimeSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
+        const allTimeSlots = [
+            '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+            '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'
+        ];
 
         // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initSupabase();
             initLaunchMode();
             setupEventListeners();
-            document.getElementById('date').min = new Date().toISOString().split('T')[0];
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').min = today;
         });
+
+        async function initSupabase() {
+            try {
+                if (typeof supabaseJs !== 'undefined') {
+                    supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    
+                    // Test connection
+                    const { data, error } = await supabase.from('bookings').select('count', { count: 'exact', head: true });
+                    
+                    if (error) {
+                        console.warn('⚠️ Supabase connection test failed:', error.message);
+                        console.log('📦 Falling back to localStorage mode');
+                        supabaseConnected = false;
+                    } else {
+                        console.log('✅ Supabase connected successfully!');
+                        supabaseConnected = true;
+                    }
+                } else {
+                    console.warn('⚠️ Supabase library not loaded, using localStorage fallback');
+                    supabaseConnected = false;
+                }
+            } catch (error) {
+                console.error('❌ Supabase initialization error:', error);
+                console.log('📦 Falling back to localStorage mode');
+                supabaseConnected = false;
+            }
+        }
         
         function initLaunchMode() {
+            // Hide admin link if configured
+            if (!SITE_CONFIG.SHOW_ADMIN_LINK) {
+                const adminLink = document.getElementById('adminNavLink');
+                if (adminLink) adminLink.classList.add('hidden');
+            }
+
             const isLocalMode = SITE_CONFIG.launchMode === 'local';
+            const isSupabaseMode = SITE_CONFIG.launchMode === 'supabase';
+            const isSquareMode = SITE_CONFIG.launchMode === 'square';
             
             if (isLocalMode) {
-                // Show local testing form
+                // LOCAL MODE: Show local testing form WITH warning banner
                 document.getElementById('bookingForm').classList.remove('hidden');
                 document.getElementById('squareCta').classList.add('hidden');
                 document.getElementById('localModeBanner').classList.remove('hidden');
@@ -875,8 +833,20 @@
                     heroBtn.href = '#booking';
                     heroBtn.textContent = 'Book Appointment';
                 }
-            } else {
-                // Square mode - show Square CTA, hide local form
+            } else if (isSupabaseMode) {
+                // SUPABASE MODE: Show booking form WITHOUT local warning banner
+                document.getElementById('bookingForm').classList.remove('hidden');
+                document.getElementById('squareCta').classList.add('hidden');
+                document.getElementById('localModeBanner').classList.add('hidden');
+                
+                // Update hero button
+                const heroBtn = document.querySelector('.hero-buttons .btn-primary');
+                if (heroBtn) {
+                    heroBtn.href = '#booking';
+                    heroBtn.textContent = 'Book Appointment';
+                }
+            } else if (isSquareMode) {
+                // SQUARE MODE: Show Square CTA, hide local form
                 document.getElementById('bookingForm').classList.add('hidden');
                 document.getElementById('squareCta').classList.remove('hidden');
                 document.getElementById('localModeBanner').classList.add('hidden');
@@ -959,7 +929,29 @@
 
             // Check if day is open
             const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+            
+            // Get schedule (from Supabase or localStorage)
+            let schedule = defaultSchedule;
+            if (supabaseConnected) {
+                try {
+                    const { data: scheduleData } = await supabase.from('schedule').select('*');
+                    if (scheduleData) {
+                        schedule = {};
+                        scheduleData.forEach(s => {
+                            schedule[s.day.toLowerCase()] = {
+                                open: s.open,
+                                start: s.start_time,
+                                end: s.end_time
+                            };
+                        });
+                    }
+                } catch (e) {
+                    console.log('Using default schedule');
+                }
+            } else {
+                schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+            }
+            
             const daySchedule = schedule[dayOfWeek];
 
             if (!daySchedule || !daySchedule.open) {
@@ -991,11 +983,66 @@
         }
 
         async function getAvailableTimeSlots(date) {
-            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-            const blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+            let bookings = [];
+            let blockedTimes = [];
+            let schedule = defaultSchedule;
+            
+            // Try Supabase first, fall back to localStorage
+            if (supabaseConnected) {
+                try {
+                    // Get bookings from Supabase - use 'canceled' (not 'cancelled')
+                    const { data: bookingsData, error: bookingsError } = await supabase
+                        .from('bookings')
+                        .select('*')
+                        .eq('date', date)
+                        .neq('status', 'canceled');
+                    
+                    if (!bookingsError && bookingsData) {
+                        bookings = bookingsData;
+                    }
+                    
+                    // Get blocked times from Supabase
+                    const { data: blockedData, error: blockedError } = await supabase
+                        .from('blocked_times')
+                        .select('*')
+                        .eq('date', date);
+                    
+                    if (!blockedError && blockedData) {
+                        blockedTimes = blockedData;
+                    }
+                    
+                    // Get schedule from Supabase
+                    const { data: scheduleData, error: scheduleError } = await supabase
+                        .from('schedule')
+                        .select('*');
+                    
+                    if (!scheduleError && scheduleData) {
+                        schedule = {};
+                        scheduleData.forEach(s => {
+                            schedule[s.day.toLowerCase()] = {
+                                open: s.open,
+                                start: s.start_time,
+                                end: s.end_time
+                            };
+                        });
+                    }
+                    
+                    console.log('📡 Loaded data from Supabase');
+                } catch (error) {
+                    console.warn('⚠️ Supabase fetch failed, using localStorage:', error);
+                    // Fall back to localStorage
+                    bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+                    blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+                }
+            } else {
+                // Use localStorage
+                bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+                blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+            }
 
             const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+            
+            // Use the schedule variable that was already set earlier in the function
             const daySchedule = schedule[dayOfWeek];
 
             if (!daySchedule || !daySchedule.open) return [];
@@ -1019,20 +1066,23 @@
 
                 // Check blocked times (compare full time ranges)
                 const isBlocked = blockedForDate.some(blocked => {
-                    const blockedStart = time24ToMinutes(blocked.start);
-                    const blockedEnd = time24ToMinutes(blocked.end);
+                    const blockedStart = time24ToMinutes(blocked.start_time || blocked.start);
+                    const blockedEnd = time24ToMinutes(blocked.end_time || blocked.end);
                     // Overlap check: slot overlaps with blocked time if:
                     // slot start < blocked end AND slot end > blocked start
                     return slotStartMinutes < blockedEnd && slotEndMinutes > blockedStart;
                 });
                 if (isBlocked) return false;
 
-                // Check existing bookings
-                const isBooked = bookings.some(b =>
-                    b.date === date &&
-                    b.time === slot &&
-                    (b.status === 'pending' || b.status === 'confirmed')
-                );
+                // Check existing bookings (handle both Supabase and localStorage formats)
+                const isBooked = bookings.some(b => {
+                    const bookingDate = b.date;
+                    const bookingTime = b.time;
+                    const bookingStatus = b.status;
+                    return bookingDate === date &&
+                        bookingTime === slot &&
+                        (bookingStatus === 'pending' || bookingStatus === 'confirmed');
+                });
                 if (isBooked) return false;
 
                 return true;
@@ -1079,7 +1129,7 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Request...';
 
-                // Double-check availability
+                // Double-check availability before inserting
                 const availableSlots = await getAvailableTimeSlots(date);
                 if (!availableSlots.includes(time)) {
                     showBookingMessage('Sorry, this time slot was just booked. Please select another time.');
@@ -1089,27 +1139,112 @@
                     return;
                 }
 
-                // Create booking
-                const booking = {
-                    id: Date.now().toString(),
-                    name: String(formData.get('name') || '').trim(),
-                    phone: String(formData.get('phone') || '').trim(),
-                    email: String(formData.get('email') || '').trim(),
-                    service: formData.get('service'),
-                    date: date,
-                    time: time,
-                    notes: String(formData.get('notes') || '').trim(),
-                    status: 'pending',
-                    createdAt: new Date().toISOString()
-                };
+                // Try to save to Supabase first (source of truth)
+                if (supabaseConnected) {
+                    try {
+                        const { data, error } = await supabase
+                            .from('bookings')
+                            .insert([{
+                                client_name: String(formData.get('name') || '').trim(),
+                                phone: String(formData.get('phone') || '').trim(),
+                                email: String(formData.get('email') || '').trim(),
+                                service: formData.get('service'),
+                                date: date,
+                                time: time,
+                                notes: String(formData.get('notes') || '').trim(),
+                                status: 'pending'
+                            }])
+                            .select();
+                        
+                        if (error) throw error;
+                        
+                        // SUCCESS: Use Supabase returned data (includes real ID)
+                        console.log('✅ Booking saved to Supabase:', data);
+                        
+                        // Cache the Supabase row in localStorage (overwrite, don't append)
+                        const supabaseBooking = data[0];
+                        const localCache = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+                        
+                        // Remove any existing booking with same date/time (prevent duplicates)
+                        const filteredCache = localCache.filter(b => 
+                            !(b.date === supabaseBooking.date && b.time === supabaseBooking.time)
+                        );
+                        
+                        // Add the Supabase booking (with real ID)
+                        filteredCache.push({
+                            id: supabaseBooking.id,
+                            name: supabaseBooking.client_name,
+                            phone: supabaseBooking.phone,
+                            email: supabaseBooking.email,
+                            service: supabaseBooking.service,
+                            date: supabaseBooking.date,
+                            time: supabaseBooking.time,
+                            notes: supabaseBooking.notes,
+                            status: supabaseBooking.status,
+                            createdAt: supabaseBooking.created_at
+                        });
+                        
+                        localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(filteredCache));
+                        console.log('📦 Cached Supabase booking in localStorage');
+                        
+                    } catch (error) {
+                        console.error('❌ Supabase save failed:', error);
+                        console.log('📦 Falling back to localStorage only');
+                        
+                        // FALLBACK: Save to localStorage only
+                        const fallbackBooking = {
+                            id: 'local_' + Date.now(),
+                            name: String(formData.get('name') || '').trim(),
+                            phone: String(formData.get('phone') || '').trim(),
+                            email: String(formData.get('email') || '').trim(),
+                            service: formData.get('service'),
+                            date: date,
+                            time: time,
+                            notes: String(formData.get('notes') || '').trim(),
+                            status: 'pending',
+                            createdAt: new Date().toISOString()
+                        };
+                        
+                        const localBookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+                        localBookings.push(fallbackBooking);
+                        localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(localBookings));
+                        
+                        // Show warning that we're in fallback mode
+                        console.warn('⚠️ Booking saved to localStorage only - will not sync across devices');
+                    }
+                } else {
+                    // NO SUPABASE: Save to localStorage only
+                    const localBooking = {
+                        id: 'local_' + Date.now(),
+                        name: String(formData.get('name') || '').trim(),
+                        phone: String(formData.get('phone') || '').trim(),
+                        email: String(formData.get('email') || '').trim(),
+                        service: formData.get('service'),
+                        date: date,
+                        time: time,
+                        notes: String(formData.get('notes') || '').trim(),
+                        status: 'pending',
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    const localBookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+                    localBookings.push(localBooking);
+                    localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(localBookings));
+                    
+                    console.log('📦 Saved to localStorage (Supabase not connected)');
+                }
 
-                // Save to localStorage
-                const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
-                bookings.push(booking);
-                localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
-
-                // Show success
-                document.getElementById('successModal').classList.add('active');
+                // Show success (different message if in fallback mode)
+                const successModal = document.getElementById('successModal');
+                const successMessage = successModal.querySelector('p');
+                
+                if (supabaseConnected) {
+                    successMessage.textContent = "Thanks for booking with 153 Cuts. We'll confirm your appointment soon.";
+                } else {
+                    successMessage.textContent = "Thanks for booking! Note: You're in local mode - the barber will need to check this device for your booking.";
+                }
+                
+                successModal.classList.add('active');
 
                 // Reset form
                 form.reset();

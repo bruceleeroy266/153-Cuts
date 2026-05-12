@@ -6,6 +6,8 @@
     <title>Admin | 153 Cuts</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --gold: #D4AF37;
@@ -29,6 +31,8 @@
             color: var(--white);
             line-height: 1.6;
         }
+        
+        .hidden { display: none !important; }
         
         /* Login Screen */
         .login-screen {
@@ -72,7 +76,7 @@
             font-weight: 500;
         }
         
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 0.75rem 1rem;
             background: var(--dark-gray);
@@ -82,7 +86,7 @@
             font-size: 1rem;
         }
         
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--gold);
         }
@@ -253,6 +257,28 @@
             display: flex;
             gap: 1rem;
             align-items: center;
+        }
+        
+        /* Connection Status Banner */
+        .connection-banner {
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .connection-banner.connected {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .connection-banner.local {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
         }
         
         /* Stats Cards */
@@ -569,24 +595,24 @@
         .modal.active { display: flex; }
         
         .modal-content {
-            background: var(--medium-gray);
+            background: var(--dark-gray);
             border-radius: 16px;
-            padding: 1.5rem;
-            max-width: 500px;
             width: 100%;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
-            border: 1px solid var(--gold);
+            border: 1px solid var(--medium-gray);
         }
         
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--medium-gray);
         }
         
-        .modal-header h3 { margin: 0; }
+        .modal-header h3 { font-size: 1.25rem; }
         
         .close-modal {
             background: none;
@@ -596,70 +622,22 @@
             cursor: pointer;
         }
         
-        .close-modal:hover { color: var(--gold); }
+        .close-modal:hover { color: var(--white); }
         
-        .modal .form-group { margin-bottom: 1rem; }
-        .modal .form-group label { font-size: 0.9rem; }
+        .modal form { padding: 1.5rem; }
         
-        /* Demo Banner */
-        .demo-banner {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid var(--info);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .demo-banner i { color: var(--info); font-size: 1.25rem; }
-        .demo-banner p { margin: 0; font-size: 0.9rem; }
-        
-        /* Local Testing Warning */
-        .local-testing-warning {
-            background: rgba(245, 158, 11, 0.15);
-            border: 2px solid var(--warning);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        
-        .local-testing-warning i {
-            color: var(--warning);
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .local-testing-warning h3 {
-            color: var(--warning);
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
-        
-        .local-testing-warning p {
-            margin: 0;
-            color: #ccc;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .hidden { display: none !important; }
-        
-        /* Mobile Menu Button */
+        /* Mobile */
         .mobile-menu-toggle {
             display: none;
             position: fixed;
             top: 1rem;
             left: 1rem;
-            z-index: 1100;
+            z-index: 101;
             background: var(--gold);
             color: var(--dark);
             border: none;
-            border-radius: 8px;
             padding: 0.75rem;
-            font-size: 1.25rem;
+            border-radius: 8px;
             cursor: pointer;
         }
         
@@ -670,82 +648,22 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
             z-index: 99;
         }
         
         .sidebar-overlay.active { display: block; }
         
-        /* Mobile */
         @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: block;
-            }
-            
+            .mobile-menu-toggle { display: block; }
             .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                width: 280px;
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                z-index: 100;
-                border-right: 1px solid var(--medium-gray);
-                border-bottom: none;
+                transition: transform 0.3s;
             }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 4rem 1rem 1rem;
-            }
-            
-            .admin-dashboard.active { display: block; }
-            
-            .top-bar { 
-                flex-direction: column; 
-                align-items: flex-start;
-                margin-top: 1rem;
-            }
-            
-            .top-bar-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .booking-header, .booking-meta { flex-direction: column; gap: 0.5rem; }
-            
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 1rem; padding-top: 4rem; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            
-            .filter-tabs { width: 100%; }
-            .filter-tab { flex: 1; text-align: center; padding: 0.5rem; font-size: 0.75rem; }
-            
-            .booking-actions { 
-                width: 100%; 
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.5rem;
-            }
-            
-            .booking-actions button { 
-                flex: none;
-                padding: 0.5rem 0.25rem;
-                font-size: 0.75rem;
-            }
-            
-            .modal-content { padding: 1rem; max-height: 85vh; margin: 1rem; }
-            
-            .day-schedule { padding: 1rem; }
-            .time-inputs { flex-direction: column; align-items: flex-start; }
-            
-            .client-header { flex-direction: column; }
-            .client-stats { flex-wrap: wrap; }
-            
-            .blocked-time-item { flex-direction: column; align-items: flex-start; }
+            .booking-header { flex-direction: column; }
         }
     </style>
 </head>
@@ -754,44 +672,42 @@
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
             <h1><i class="fas fa-lock"></i> Admin Login</h1>
-            <p class="subtitle">153 Cuts Management</p>
+            <p class="subtitle">153 Cuts Booking System</p>
             
-            <form id="loginForm" onsubmit="return false;">
+            <div class="error-message" id="loginError"></div>
+            
+            <form id="loginForm">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Enter username" required autocomplete="off">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="admin@153cuts.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter password" required autocomplete="off">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--light-gray); cursor: pointer;">
-                        <input type="checkbox" id="showPassword" style="width: auto;"> Show password
-                    </label>
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
                 </div>
-                <div id="loginError" class="error-message"></div>
-                <button type="button" class="btn-primary" id="loginButton">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
+                <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="checkbox" id="showPassword">
+                    <label for="showPassword" style="margin: 0; font-weight: normal; cursor: pointer;">Show password</label>
+                </div>
+                <button type="submit" class="btn-primary" id="loginButton">Sign In</button>
             </form>
             
-            <div class="security-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <strong>TEMPORARY LOCAL SETUP:</strong> This admin portal uses local browser storage and should be replaced with proper backend authentication (Supabase/Firebase) before production deployment.
+            <div class="security-warning" style="background: var(--success); opacity: 0.8;">
+                <i class="fas fa-shield-alt"></i>
+                <strong>SECURE LOGIN</strong><br>
+                Admin access is handled by Supabase Auth.
             </div>
         </div>
     </div>
 
     <!-- Admin Dashboard -->
     <div class="admin-dashboard" id="adminDashboard">
-        <!-- Mobile Menu Toggle -->
         <button class="mobile-menu-toggle" id="mobileMenuToggle">
             <i class="fas fa-bars"></i>
         </button>
         
-        <!-- Sidebar Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
         
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-cut"></i> 153 Cuts</h2>
@@ -807,17 +723,15 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Local Testing Warning -->
-            <div class="local-testing-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Local Testing Only</h3>
-                <p>This admin portal is for <strong>local testing only</strong>. It will not receive public bookings on Vercel unless Supabase/backend is connected. Bookings are stored in your browser and won't sync across devices.</p>
+            <!-- Connection Status Banner -->
+            <div class="connection-banner connected hidden" id="connectedBanner">
+                <i class="fas fa-cloud"></i>
+                <span><strong>Supabase Connected:</strong> Bookings sync across devices.</span>
             </div>
             
-            <!-- Demo Banner -->
-            <div class="demo-banner" id="demoBanner">
-                <i class="fas fa-info-circle"></i>
-                <p><strong>Local Mode:</strong> Using browser storage. Data won't sync across devices. Connect Supabase for production.</p>
+            <div class="connection-banner local hidden" id="localBanner">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span><strong>Local Mode Only:</strong> Bookings will not sync across devices. Connect Supabase for production.</span>
             </div>
 
             <!-- Top Bar -->
@@ -969,31 +883,31 @@
 
     <script>
         // ============================================
-        // ⚠️ TEMPORARY LOCAL SETUP - FOR DEVELOPMENT ONLY
+        // SUPABASE AUTH - SECURE ADMIN ACCESS
         // ============================================
-        // WARNING: Hardcoded credentials below are for LOCAL TESTING ONLY.
-        // These credentials are NOT secure for production use.
+        // Admin access is handled by Supabase Auth.
+        // No hardcoded credentials are stored in the HTML.
         // 
-        // BEFORE DEPLOYING TO PRODUCTION:
-        // 1. Remove hardcoded credentials
-        // 2. Implement proper backend authentication (Supabase Auth, Firebase Auth, etc.)
-        // 3. Use environment variables for secrets
-        // 4. Enable HTTPS-only cookies for session management
+        // To create an admin user:
+        // 1. Go to Supabase Dashboard > Authentication > Users
+        // 2. Add a new user with email/password
+        // 3. That user can now log in to this admin portal
+        // 
+        // REMAINING WORK BEFORE FULL PRODUCTION:
+        // 1. Enable Row Level Security (RLS) policies on all tables
+        // 2. Create RLS policies to restrict public access
+        // 3. Only authenticated admins should have full CRUD access
         // ============================================
 
-        const ADMIN_CREDENTIALS = {
-            username: 'admin',
-            password: '153CutsAdmin123!',
-            name: 'Admin'
-        };
-
-        const SESSION_KEYS = {
-            loggedIn: 'adminLoggedIn',
-            username: 'adminUsername',
-            name: 'adminName',
-            loginTime: 'adminLoginTimestamp',
-            lastActivity: 'adminLastActivity'
-        };
+        // ============================================
+        // 153 CUTS SUPABASE CONFIGURATION
+        // ============================================
+        const SUPABASE_URL = 'https://ytjqgxhcwnksnufvcxip.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0anFneGhjd25rc251ZnZjeGlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTE4NzksImV4cCI6MjA5NDA4Nzg3OX0.mxE1xdAkg5nxMHMDDsYs-rQu9pboyWIPRjCTHnwSTT8';
+        
+        // Initialize Supabase
+        let supabase;
+        let supabaseConnected = false;
 
         const STORAGE_KEYS = {
             bookings: 'bookings',
@@ -1013,17 +927,93 @@
             sunday: { open: false, start: '09:00', end: '18:00' }
         };
 
+        // ============================================
+        // RLS POLICY WARNING
+        // ============================================
+        // BEFORE FULL PRODUCTION LAUNCH:
+        // 
+        // 1. Enable RLS on all tables:
+        //    ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
+        //    ALTER TABLE blocked_times ENABLE ROW LEVEL SECURITY;
+        //    ALTER TABLE schedule ENABLE ROW LEVEL SECURITY;
+        //    ALTER TABLE client_notes ENABLE ROW LEVEL SECURITY;
+        //
+        // 2. Create policies:
+        //    - Public: can only INSERT bookings
+        //    - Public: cannot READ other people's bookings
+        //    - Public: cannot DELETE or UPDATE
+        //    - Admin: full access (requires auth)
+        //
+        // 3. Replace hardcoded admin with Supabase Auth
+        // ============================================
+
         // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initSupabase();
             checkAuth();
             setupEventListeners();
         });
-
-        function checkAuth() {
-            const isLoggedIn = sessionStorage.getItem(SESSION_KEYS.loggedIn) === 'true';
-            if (isLoggedIn) {
-                showDashboard();
+        
+        // Initialize Supabase connection
+        async function initSupabase() {
+            try {
+                if (typeof supabaseJs !== 'undefined') {
+                    supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    
+                    // Test connection
+                    const { data, error } = await supabase.from('bookings').select('count', { count: 'exact', head: true });
+                    
+                    if (error) {
+                        console.warn('⚠️ Supabase connection test failed:', error.message);
+                        console.log('📦 Admin will use localStorage fallback');
+                        supabaseConnected = false;
+                    } else {
+                        console.log('✅ Supabase connected successfully in admin!');
+                        supabaseConnected = true;
+                    }
+                } else {
+                    console.warn('⚠️ Supabase library not loaded, using localStorage fallback');
+                    supabaseConnected = false;
+                }
+            } catch (error) {
+                console.error('❌ Supabase initialization error:', error);
+                console.log('📦 Falling back to localStorage mode');
+                supabaseConnected = false;
+            }
+            
+            // Update connection banner
+            updateConnectionBanner();
+        }
+        
+        function updateConnectionBanner() {
+            const connectedBanner = document.getElementById('connectedBanner');
+            const localBanner = document.getElementById('localBanner');
+            
+            if (supabaseConnected) {
+                connectedBanner.classList.remove('hidden');
+                localBanner.classList.add('hidden');
             } else {
+                connectedBanner.classList.add('hidden');
+                localBanner.classList.remove('hidden');
+            }
+        }
+
+        async function checkAuth() {
+            try {
+                // Check for existing Supabase session
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) throw error;
+                
+                if (session) {
+                    // Valid session exists - show dashboard
+                    await showDashboard();
+                } else {
+                    // No valid session - show login
+                    showLogin();
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
                 showLogin();
             }
         }
@@ -1044,9 +1034,9 @@
 
             // Navigation
             document.querySelectorAll('.nav-menu a[data-section]').forEach(link => {
-                link.addEventListener('click', (e) => {
+                link.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    showSection(link.dataset.section);
+                    await showSection(link.dataset.section);
                     document.querySelectorAll('.nav-menu a').forEach(l => l.classList.remove('active'));
                     link.classList.add('active');
                     closeMobileMenu();
@@ -1055,10 +1045,10 @@
 
             // Filter tabs
             document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
+                tab.addEventListener('click', async () => {
                     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    loadBookings(tab.dataset.filter);
+                    await loadBookings(tab.dataset.filter);
                 });
             });
 
@@ -1083,35 +1073,56 @@
             icon.classList.remove('fa-times');
         }
 
-        function doLogin() {
-            const username = document.getElementById('username').value.trim();
+        async function doLogin() {
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('loginError');
+            const loginButton = document.getElementById('loginButton');
 
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                // Set session
-                sessionStorage.setItem(SESSION_KEYS.loggedIn, 'true');
-                sessionStorage.setItem(SESSION_KEYS.username, ADMIN_CREDENTIALS.username);
-                sessionStorage.setItem(SESSION_KEYS.name, ADMIN_CREDENTIALS.name);
-                sessionStorage.setItem(SESSION_KEYS.loginTime, new Date().toISOString());
-                sessionStorage.setItem(SESSION_KEYS.lastActivity, new Date().toISOString());
+            try {
+                loginButton.disabled = true;
+                loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
                 
-                errorDiv.classList.remove('show');
-                showDashboard();
-            } else {
-                errorDiv.textContent = 'Invalid username or password. Please try again.';
+                // Sign in with Supabase Auth
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                if (data.session) {
+                    // Successful login - Supabase handles the session
+                    errorDiv.classList.remove('show');
+                    await showDashboard();
+                } else {
+                    throw new Error('No session returned');
+                }
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message || 'Invalid email or password. Please try again.';
                 errorDiv.classList.add('show');
+                loginButton.disabled = false;
+                loginButton.innerHTML = 'Sign In';
             }
         }
 
-        function logout() {
-            // Clear only sessionStorage (preserve localStorage data)
-            sessionStorage.removeItem(SESSION_KEYS.loggedIn);
-            sessionStorage.removeItem(SESSION_KEYS.username);
-            sessionStorage.removeItem(SESSION_KEYS.name);
-            sessionStorage.removeItem(SESSION_KEYS.loginTime);
-            sessionStorage.removeItem(SESSION_KEYS.lastActivity);
-            location.reload();
+        async function logout() {
+            try {
+                // Sign out from Supabase Auth
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                // Clear UI and reload
+                location.reload();
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Force reload anyway
+                location.reload();
+            }
         }
 
         function showLogin() {
@@ -1119,36 +1130,23 @@
             document.getElementById('adminDashboard').classList.remove('active');
         }
 
-        function showDashboard() {
+        async function showDashboard() {
+            // Get current user info from Supabase
+            const { data: { user } } = await supabase.auth.getUser();
+            const adminEmail = user?.email || 'Admin';
+            
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('adminDashboard').classList.add('active');
-            document.getElementById('adminName').textContent = sessionStorage.getItem(SESSION_KEYS.name) || 'Admin';
+            document.getElementById('adminName').textContent = adminEmail;
             
-            // Initialize data if empty
-            if (!localStorage.getItem(STORAGE_KEYS.bookings)) {
-                localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify([]));
-            }
-            if (!localStorage.getItem(STORAGE_KEYS.schedule)) {
-                localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(defaultSchedule));
-            }
-            if (!localStorage.getItem(STORAGE_KEYS.blockedTimes)) {
-                localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify([]));
-            }
-            if (!localStorage.getItem(STORAGE_KEYS.clientNotes)) {
-                localStorage.setItem(STORAGE_KEYS.clientNotes, JSON.stringify({}));
-            }
-            if (!localStorage.getItem(STORAGE_KEYS.clientProfiles)) {
-                localStorage.setItem(STORAGE_KEYS.clientProfiles, JSON.stringify({}));
-            }
-            
-            loadBookings('all');
-            loadClients();
-            loadSchedule();
-            loadBlockedTimes();
-            updateStats();
+            await loadBookings('all');
+            await loadClients();
+            await loadSchedule();
+            await loadBlockedTimes();
+            await updateStats();
         }
 
-        function showSection(section) {
+        async function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
             document.getElementById(section + 'Section').classList.remove('hidden');
             
@@ -1160,22 +1158,66 @@
             };
             document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
             
-            if (section === 'clients') loadClients();
-            if (section === 'schedule') loadSchedule();
-            if (section === 'blocked') loadBlockedTimes();
+            if (section === 'clients') await loadClients();
+            if (section === 'schedule') await loadSchedule();
+            if (section === 'blocked') await loadBlockedTimes();
         }
 
-        // Bookings
-        function getBookings() {
-            return JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+        // ============================================
+        // BOOKINGS - SUPABASE IS SOURCE OF TRUTH
+        // ============================================
+        
+        async function getBookings() {
+            // SUPABASE IS PRIMARY SOURCE
+            if (supabaseConnected) {
+                try {
+                    const { data, error } = await supabase
+                        .from('bookings')
+                        .select('*')
+                        .order('date', { ascending: true });
+                    
+                    if (!error && data) {
+                        console.log('📡 Loaded bookings from Supabase:', data.length);
+                        // Normalize to app format
+                        const normalized = data.map(row => ({
+                            id: row.id,
+                            name: row.client_name || '',
+                            phone: row.phone || '',
+                            email: row.email || '',
+                            service: row.service || '',
+                            date: row.date || '',
+                            time: row.time || '',
+                            notes: row.notes || '',
+                            status: row.status || 'pending',
+                            createdAt: row.created_at || ''
+                        }));
+                        // Cache in localStorage (overwrite, don't append)
+                        localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(normalized));
+                        return normalized;
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Failed to load from Supabase, using cached localStorage');
+                }
+            }
+            
+            // FALLBACK: Use cached localStorage
+            const localData = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]');
+            return localData.map(row => ({
+                id: row.id,
+                name: row.client_name || row.name || '',
+                phone: row.phone || '',
+                email: row.email || '',
+                service: row.service || '',
+                date: row.date || '',
+                time: row.time || '',
+                notes: row.notes || '',
+                status: row.status || 'pending',
+                createdAt: row.created_at || row.createdAt || ''
+            }));
         }
 
-        function saveBookings(bookings) {
-            localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
-        }
-
-        function loadBookings(filter = 'all') {
-            const bookings = getBookings();
+        async function loadBookings(filter = 'all') {
+            const bookings = await getBookings();
             const container = document.getElementById('bookingsList');
             
             const filtered = filter === 'all' ? bookings : bookings.filter(b => b.status === filter);
@@ -1218,31 +1260,70 @@
                 </div>
             `).join('');
             
-            updateStats();
+            await updateStats();
         }
 
-        function updateStatus(id, status) {
-            const bookings = getBookings();
+        async function updateStatus(id, status) {
+            // Update in Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    const { error } = await supabase
+                        .from('bookings')
+                        .update({ status: status, updated_at: new Date().toISOString() })
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    console.log('✅ Status updated in Supabase');
+                } catch (error) {
+                    console.error('❌ Failed to update status in Supabase:', error);
+                    alert('Failed to update status. Please try again.');
+                    return;
+                }
+            }
+            
+            // Update local cache
+            const bookings = await getBookings();
             const booking = bookings.find(b => b.id === id);
             if (booking) {
                 booking.status = status;
-                saveBookings(bookings);
-                const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
-                loadBookings(activeFilter);
+                localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
             }
-        }
-
-        function deleteBooking(id) {
-            if (!confirm('Delete this booking permanently?')) return;
-            let bookings = getBookings();
-            bookings = bookings.filter(b => b.id !== id);
-            saveBookings(bookings);
+            
             const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
-            loadBookings(activeFilter);
+            await loadBookings(activeFilter);
         }
 
-        function openEditModal(id) {
-            const bookings = getBookings();
+        async function deleteBooking(id) {
+            if (!confirm('Delete this booking permanently?')) return;
+            
+            // Delete from Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    const { error } = await supabase
+                        .from('bookings')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    console.log('✅ Booking deleted from Supabase');
+                } catch (error) {
+                    console.error('❌ Failed to delete from Supabase:', error);
+                    alert('Failed to delete booking. Please try again.');
+                    return;
+                }
+            }
+            
+            // Update local cache
+            let bookings = await getBookings();
+            bookings = bookings.filter(b => b.id !== id);
+            localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
+            
+            const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
+            await loadBookings(activeFilter);
+        }
+
+        async function openEditModal(id) {
+            const bookings = await getBookings();
             const booking = bookings.find(b => b.id === id);
             if (!booking) return;
             
@@ -1259,7 +1340,7 @@
             document.getElementById('editBookingModal').classList.add('active');
         }
 
-        function saveBookingEdit(e) {
+        async function saveBookingEdit(e) {
             e.preventDefault();
             
             // Validation
@@ -1277,12 +1358,9 @@
             
             const time = convertTo12Hour(time24);
             const id = document.getElementById('editBookingId').value;
-            const bookings = getBookings();
-            const currentBooking = bookings.find(b => b.id === id);
-            
-            if (!currentBooking) return;
             
             // Check for conflicts (excluding current booking)
+            const bookings = await getBookings();
             const conflict = bookings.find(b => 
                 b.id !== id && 
                 b.date === date && 
@@ -1295,114 +1373,249 @@
                 return;
             }
             
-            // Update booking
-            currentBooking.name = name;
-            currentBooking.phone = phone;
-            currentBooking.email = document.getElementById('editEmail').value.trim();
-            currentBooking.service = service;
-            currentBooking.date = date;
-            currentBooking.time = time;
-            currentBooking.status = document.getElementById('editStatus').value;
-            currentBooking.notes = document.getElementById('editNotes').value.trim();
+            const updates = {
+                client_name: name,
+                phone: phone,
+                email: document.getElementById('editEmail').value.trim(),
+                service: service,
+                date: date,
+                time: time,
+                status: document.getElementById('editStatus').value,
+                notes: document.getElementById('editNotes').value.trim()
+            };
             
-            saveBookings(bookings);
+            // Add updated_at timestamp
+            updates.updated_at = new Date().toISOString();
+            
+            // Update in Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    const { error } = await supabase
+                        .from('bookings')
+                        .update(updates)
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    console.log('✅ Booking updated in Supabase');
+                } catch (error) {
+                    console.error('❌ Failed to update in Supabase:', error);
+                    alert('Failed to update booking. Please try again.');
+                    return;
+                }
+            }
+            
+            // Update local cache
+            const currentBooking = bookings.find(b => b.id === id);
+            if (currentBooking) {
+                Object.assign(currentBooking, {
+                    name: updates.client_name,
+                    phone: updates.phone,
+                    email: updates.email,
+                    service: updates.service,
+                    date: updates.date,
+                    time: updates.time,
+                    status: updates.status,
+                    notes: updates.notes
+                });
+                localStorage.setItem(STORAGE_KEYS.bookings, JSON.stringify(bookings));
+            }
+            
             closeModal('editBookingModal');
             const activeFilter = document.querySelector('.filter-tab.active').dataset.filter;
-            loadBookings(activeFilter);
-            updateStats();
+            await loadBookings(activeFilter);
         }
 
-        // Clients
-        function loadClients() {
-            const bookings = getBookings();
-            const clientNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientNotes) || '{}');
+        // ============================================
+        // CLIENT NOTES - SUPABASE IS SOURCE OF TRUTH
+        // ============================================
+        
+        async function getClientNotes() {
+            // SUPABASE IS PRIMARY SOURCE
+            if (supabaseConnected) {
+                try {
+                    const { data, error } = await supabase
+                        .from('client_notes')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        console.log('📡 Loaded client notes from Supabase:', data.length);
+                        const normalized = data.map(row => ({
+                            id: row.id,
+                            clientPhone: row.client_phone,
+                            clientName: row.client_name,
+                            bookingId: row.booking_id,
+                            note: row.note,
+                            createdAt: row.created_at
+                        }));
+                        // Cache in localStorage
+                        localStorage.setItem(STORAGE_KEYS.clientNotes, JSON.stringify(normalized));
+                        return normalized;
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Failed to load client notes from Supabase');
+                }
+            }
             
-            // Group by phone
+            // FALLBACK: Use cached localStorage
+            const localData = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientNotes) || '[]');
+            return localData.map(row => ({
+                id: row.id,
+                clientPhone: row.client_phone || row.clientPhone,
+                clientName: row.client_name || row.clientName,
+                bookingId: row.booking_id || row.bookingId,
+                note: row.note,
+                createdAt: row.created_at || row.createdAt
+            }));
+        }
+
+        async function loadClients() {
+            const bookings = await getBookings();
+            const notes = await getClientNotes();
+            const container = document.getElementById('clientsList');
+            
+            // Group bookings by phone
             const clients = {};
             bookings.forEach(b => {
-                const key = b.phone;
-                if (!clients[key]) {
-                    clients[key] = {
+                if (!clients[b.phone]) {
+                    clients[b.phone] = {
                         name: b.name,
                         phone: b.phone,
                         email: b.email,
                         bookings: [],
-                        completed: 0,
-                        canceled: 0,
-                        noShow: 0
+                        notes: []
                     };
                 }
-                clients[key].bookings.push(b);
-                if (b.status === 'completed') clients[key].completed++;
-                if (b.status === 'canceled') clients[key].canceled++;
+                clients[b.phone].bookings.push(b);
             });
             
-            const container = document.getElementById('clientsList');
-            const clientList = Object.values(clients).sort((a, b) => b.bookings.length - a.bookings.length);
+            // Add notes to clients
+            notes.forEach(n => {
+                if (clients[n.clientPhone]) {
+                    clients[n.clientPhone].notes.push(n);
+                }
+            });
             
-            if (clientList.length === 0) {
+            if (Object.keys(clients).length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: var(--light-gray); padding: 2rem;">No clients yet</p>';
                 return;
             }
             
-            container.innerHTML = clientList.map(client => {
-                const notes = clientNotes[client.phone] || [];
+            container.innerHTML = Object.values(clients).map(client => {
+                const totalBookings = client.bookings.length;
+                const completed = client.bookings.filter(b => b.status === 'completed').length;
+                const lastVisit = client.bookings.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                
                 return `
                     <div class="client-card">
                         <div class="client-header">
                             <div>
                                 <div class="client-name">${escapeHtml(client.name)}</div>
-                                <div class="client-phone">${escapeHtml(client.phone)} ${client.email ? '| ' + escapeHtml(client.email) : ''}</div>
+                                <div class="client-phone">${escapeHtml(client.phone)}</div>
+                                ${client.email ? `<div style="color: var(--light-gray); font-size: 0.85rem;">${escapeHtml(client.email)}</div>` : ''}
                             </div>
                         </div>
                         <div class="client-stats">
-                            <div class="client-stat">Visits: <span>${client.completed}</span></div>
-                            <div class="client-stat">Canceled: <span>${client.canceled}</span></div>
-                            <div class="client-stat">Total: <span>${client.bookings.length}</span></div>
+                            <div class="client-stat">Total: <span>${totalBookings}</span></div>
+                            <div class="client-stat">Completed: <span>${completed}</span></div>
+                            ${lastVisit ? `<div class="client-stat">Last: <span>${formatDate(lastVisit.date)}</span></div>` : ''}
                         </div>
+                        
                         <div class="notes-section">
+                            <h4 style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--gold);">Notes</h4>
                             <div class="notes-list" id="notes-${client.phone}">
-                                ${notes.length === 0 ? '<p style="color: var(--light-gray); font-size: 0.85rem;">No notes yet</p>' : 
-                                    notes.map(n => `
-                                        <div class="note-item">
-                                            <div class="note-date">${formatDate(n.date)} ${n.bookingId ? '(Booking #' + n.bookingId.slice(-4) + ')' : ''}</div>
-                                            <div>${escapeHtml(n.note)}</div>
-                                        </div>
-                                    `).join('')
-                                }
+                                ${client.notes.length > 0 ? client.notes.map(n => `
+                                    <div class="note-item">
+                                        <div class="note-date">${formatDate(n.createdAt)}</div>
+                                        <div>${escapeHtml(n.note)}</div>
+                                    </div>
+                                `).join('') : '<p style="color: var(--light-gray); font-size: 0.85rem;">No notes yet</p>'}
                             </div>
-                            <div class="add-note-form">
-                                <input type="text" id="note-input-${client.phone}" placeholder="Add note (haircut details, preferences...)" maxlength="200">
-                                <button class="btn-small btn-confirm" onclick="addClientNote('${client.phone}')">Add</button>
-                            </div>
+                            <form class="add-note-form" onsubmit="addClientNote(event, '${client.phone}', '${client.name}')">
+                                <input type="text" placeholder="Add a note..." required>
+                                <button type="submit" class="btn-small btn-confirm">Add</button>
+                            </form>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function addClientNote(phone) {
-            const input = document.getElementById(`note-input-${phone}`);
+        async function addClientNote(e, phone, name) {
+            e.preventDefault();
+            const input = e.target.querySelector('input');
             const noteText = input.value.trim();
             if (!noteText) return;
             
-            const clientNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.clientNotes) || '{}');
-            if (!clientNotes[phone]) clientNotes[phone] = [];
+            // Save to Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    const { data, error } = await supabase
+                        .from('client_notes')
+                        .insert([{
+                            client_phone: phone,
+                            client_name: name,
+                            booking_id: null,
+                            note: noteText
+                        }])
+                        .select();
+                    
+                    if (error) throw error;
+                    console.log('✅ Client note saved to Supabase:', data);
+                } catch (error) {
+                    console.error('❌ Failed to save client note to Supabase:', error);
+                    alert('Failed to save note. Please try again.');
+                    return;
+                }
+            }
             
-            clientNotes[phone].push({
-                date: new Date().toISOString(),
-                note: noteText,
+            // Update local cache
+            const notes = await getClientNotes();
+            notes.push({
+                clientPhone: phone,
+                clientName: name,
                 bookingId: null,
+                note: noteText,
                 createdAt: new Date().toISOString()
             });
+            localStorage.setItem(STORAGE_KEYS.clientNotes, JSON.stringify(notes));
             
-            localStorage.setItem(STORAGE_KEYS.clientNotes, JSON.stringify(clientNotes));
-            loadClients();
+            input.value = '';
+            await loadClients();
         }
 
-        // Schedule
-        function loadSchedule() {
-            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+        // ============================================
+        // SCHEDULE - SUPABASE IS SOURCE OF TRUTH
+        // ============================================
+        
+        async function getSchedule() {
+            // SUPABASE IS PRIMARY SOURCE
+            if (supabaseConnected) {
+                try {
+                    const { data, error } = await supabase.from('schedule').select('*');
+                    if (!error && data && data.length > 0) {
+                        const schedule = {};
+                        data.forEach(s => {
+                            schedule[s.day.toLowerCase()] = {
+                                open: s.open,
+                                start: s.start_time,
+                                end: s.end_time
+                            };
+                        });
+                        console.log('📡 Loaded schedule from Supabase');
+                        localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
+                        return schedule;
+                    }
+                } catch (e) {
+                    console.log('Using cached localStorage schedule');
+                }
+            }
+            
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+        }
+
+        async function loadSchedule() {
+            const schedule = await getSchedule();
             const container = document.getElementById('scheduleGrid');
             
             const days = [
@@ -1422,38 +1635,115 @@
                         <h3><i class="fas fa-calendar-day"></i> ${day.label}</h3>
                         <div class="time-inputs">
                             <label>
-                                <input type="checkbox" ${settings.open ? 'checked' : ''} onchange="toggleDay('${day.key}', this.checked)">
+                                <input type="checkbox" id="${day.key}-open" ${settings.open ? 'checked' : ''} onchange="toggleDay('${day.key}')">
                                 Open
                             </label>
-                            <input type="time" value="${settings.start}" onchange="updateTime('${day.key}', 'start', this.value)" ${!settings.open ? 'disabled' : ''}>
-                            <span>to</span>
-                            <input type="time" value="${settings.end}" onchange="updateTime('${day.key}', 'end', this.value)" ${!settings.open ? 'disabled' : ''}>
+                            ${settings.open ? `
+                                <input type="time" id="${day.key}-start" value="${settings.start}" onchange="updateTime('${day.key}')">
+                                <span>to</span>
+                                <input type="time" id="${day.key}-end" value="${settings.end}" onchange="updateTime('${day.key}')">
+                            ` : ''}
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function toggleDay(day, isOpen) {
-            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
+        async function toggleDay(day) {
+            const schedule = await getSchedule();
+            const isOpen = document.getElementById(day + '-open').checked;
             schedule[day].open = isOpen;
+            
+            // Update Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    await supabase.from('schedule').upsert({
+                        day: day,
+                        open: isOpen,
+                        start_time: schedule[day].start,
+                        end_time: schedule[day].end
+                    });
+                    console.log('✅ Schedule day updated in Supabase');
+                } catch (e) {
+                    console.log('Schedule day saved to localStorage only');
+                }
+            }
+            
             localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
-            loadSchedule();
+            await loadSchedule();
         }
 
-        function updateTime(day, type, value) {
-            const schedule = JSON.parse(localStorage.getItem(STORAGE_KEYS.schedule) || JSON.stringify(defaultSchedule));
-            schedule[day][type] = value;
+        async function updateTime(day) {
+            const schedule = await getSchedule();
+            schedule[day].start = document.getElementById(day + '-start').value;
+            schedule[day].end = document.getElementById(day + '-end').value;
+            
+            // Update Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    await supabase.from('schedule').upsert({
+                        day: day,
+                        open: schedule[day].open,
+                        start_time: schedule[day].start,
+                        end_time: schedule[day].end
+                    });
+                    console.log('✅ Schedule time updated in Supabase');
+                } catch (e) {
+                    console.log('Schedule time saved to localStorage only');
+                }
+            }
+            
             localStorage.setItem(STORAGE_KEYS.schedule, JSON.stringify(schedule));
         }
 
-        function saveSchedule() {
+        async function saveSchedule() {
             alert('Schedule saved!');
         }
 
-        // Blocked Times
-        function loadBlockedTimes() {
-            const blocked = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+        // ============================================
+        // BLOCKED TIMES - SUPABASE IS SOURCE OF TRUTH
+        // ============================================
+        
+        async function getBlockedTimes() {
+            // SUPABASE IS PRIMARY SOURCE
+            if (supabaseConnected) {
+                try {
+                    const { data, error } = await supabase
+                        .from('blocked_times')
+                        .select('*')
+                        .order('date', { ascending: true });
+                    
+                    if (!error && data) {
+                        console.log('📡 Loaded blocked times from Supabase:', data.length);
+                        const normalized = data.map(row => ({
+                            id: row.id,
+                            date: row.date,
+                            start: row.start_time,
+                            end: row.end_time,
+                            reason: row.reason || ''
+                        }));
+                        // Cache in localStorage (overwrite)
+                        localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(normalized));
+                        return normalized;
+                    }
+                } catch (e) {
+                    console.warn('⚠️ Failed to load blocked times from Supabase');
+                }
+            }
+            
+            // FALLBACK: Use cached localStorage
+            const localData = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+            return localData.map(row => ({
+                id: row.id,
+                date: row.date,
+                start: row.start_time || row.start,
+                end: row.end_time || row.end,
+                reason: row.reason || ''
+            }));
+        }
+
+        async function loadBlockedTimes() {
+            const blocked = await getBlockedTimes();
             const container = document.getElementById('blockedList');
             
             if (blocked.length === 0) {
@@ -1461,29 +1751,20 @@
                 return;
             }
             
-            container.innerHTML = blocked.map((item, index) => `
+            container.innerHTML = blocked.map((item) => `
                 <div class="blocked-time-item">
                     <div class="blocked-time-info">
                         <h4>${formatDate(item.date)}</h4>
                         <p>${convertTo12Hour(item.start)} - ${convertTo12Hour(item.end)} ${item.reason ? '(' + item.reason + ')' : ''}</p>
                     </div>
-                    <button class="btn-small btn-cancel" onclick="removeBlockedTime(${index})"><i class="fas fa-trash"></i></button>
+                    <button class="btn-small btn-cancel" onclick="removeBlockedTime('${item.id}')"><i class="fas fa-trash"></i></button>
                 </div>
             `).join('');
         }
 
-        function openBlockedModal() {
-            document.getElementById('blockedDate').value = '';
-            document.getElementById('blockedStart').value = '';
-            document.getElementById('blockedEnd').value = '';
-            document.getElementById('blockedReason').value = '';
-            document.getElementById('blockedModal').classList.add('active');
-        }
-
-        function saveBlockedTime(e) {
+        async function saveBlockedTime(e) {
             e.preventDefault();
             
-            // Validation
             const date = document.getElementById('blockedDate').value;
             const start = document.getElementById('blockedStart').value;
             const end = document.getElementById('blockedEnd').value;
@@ -1493,45 +1774,104 @@
             if (!start) { alert('Start time is required'); return; }
             if (!end) { alert('End time is required'); return; }
             
-            // Check end time is after start time
-            const startMinutes = timeToMinutes(start);
-            const endMinutes = timeToMinutes(end);
-            
+            const startMinutes = time24ToMinutes(start);
+            const endMinutes = time24ToMinutes(end);
             if (endMinutes <= startMinutes) {
                 alert('End time must be after start time');
                 return;
             }
             
-            const blocked = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
+            // Save to Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    const { data, error } = await supabase
+                        .from('blocked_times')
+                        .insert([{
+                            date: date,
+                            start_time: start,
+                            end_time: end,
+                            reason: reason
+                        }])
+                        .select();
+                    
+                    if (error) throw error;
+                    console.log('✅ Blocked time saved to Supabase:', data);
+                    
+                    // Use Supabase returned ID
+                    const supabaseBlocked = data[0];
+                    
+                    // Update local cache (don't duplicate)
+                    const blocked = await getBlockedTimes();
+                    blocked.push({
+                        id: supabaseBlocked.id,
+                        date: supabaseBlocked.date,
+                        start: supabaseBlocked.start_time,
+                        end: supabaseBlocked.end_time,
+                        reason: supabaseBlocked.reason || ''
+                    });
+                    localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(blocked));
+                    
+                } catch (error) {
+                    console.error('❌ Failed to save blocked time to Supabase:', error);
+                    alert('Failed to save blocked time. Please try again.');
+                    return;
+                }
+            } else {
+                // FALLBACK: Save to localStorage only
+                const blockedData = {
+                    id: 'local_' + Date.now(),
+                    date: date,
+                    start: start,
+                    end: end,
+                    reason: reason
+                };
+                const blocked = await getBlockedTimes();
+                blocked.push(blockedData);
+                localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(blocked));
+                console.log('📦 Blocked time saved to localStorage only');
+            }
             
-            blocked.push({
-                date: date,
-                start: start,
-                end: end,
-                reason: reason,
-                createdAt: new Date().toISOString()
-            });
-            
-            localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(blocked));
             closeModal('blockedModal');
-            loadBlockedTimes();
-        }
-        
-        function timeToMinutes(timeStr) {
-            const [hours, minutes] = timeStr.split(':').map(Number);
-            return hours * 60 + minutes;
+            await loadBlockedTimes();
         }
 
-        function removeBlockedTime(index) {
-            const blocked = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]');
-            blocked.splice(index, 1);
+        async function removeBlockedTime(id) {
+            // Delete from Supabase first (source of truth)
+            if (supabaseConnected) {
+                try {
+                    const { error } = await supabase
+                        .from('blocked_times')
+                        .delete()
+                        .eq('id', id);
+                    
+                    if (error) throw error;
+                    console.log('✅ Blocked time deleted from Supabase');
+                } catch (error) {
+                    console.error('❌ Failed to delete blocked time from Supabase:', error);
+                    alert('Failed to delete blocked time. Please try again.');
+                    return;
+                }
+            }
+            
+            // Update local cache
+            let blocked = await getBlockedTimes();
+            blocked = blocked.filter(b => b.id !== id);
             localStorage.setItem(STORAGE_KEYS.blockedTimes, JSON.stringify(blocked));
-            loadBlockedTimes();
+            
+            await loadBlockedTimes();
         }
 
-        // Stats
-        function updateStats() {
-            const bookings = getBookings();
+        function openBlockedModal() {
+            document.getElementById('blockedForm').reset();
+            document.getElementById('blockedModal').classList.add('active');
+        }
+
+        // ============================================
+        // STATS & UTILITIES
+        // ============================================
+        
+        async function updateStats() {
+            const bookings = await getBookings();
             const today = new Date().toISOString().split('T')[0];
             
             const pending = bookings.filter(b => b.status === 'pending').length;
@@ -1539,7 +1879,6 @@
             const completed = bookings.filter(b => b.status === 'completed').length;
             const canceled = bookings.filter(b => b.status === 'canceled').length;
             
-            // This week
             const weekStart = new Date();
             weekStart.setDate(weekStart.getDate() - weekStart.getDay());
             const weekEnd = new Date(weekStart);
@@ -1559,7 +1898,6 @@
             document.getElementById('pendingCount').textContent = pending;
         }
 
-        // Utilities
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
@@ -1575,32 +1913,41 @@
         }
 
         function formatDate(dateStr) {
+            if (!dateStr) return '';
             const date = new Date(dateStr + 'T00:00:00');
             return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         }
 
-        function convertTo24Hour(time12h) {
-            const [time, modifier] = time12h.split(' ');
+        function convertTo24Hour(time12) {
+            if (!time12) return '';
+            if (time12.includes(':') && !time12.includes(' ')) return time12;
+            
+            const [time, modifier] = time12.split(' ');
             let [hours, minutes] = time.split(':');
-            if (hours === '12') hours = '00';
-            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
-            return `${hours.padStart(2, '0')}:${minutes}`;
+            hours = parseInt(hours);
+            
+            if (modifier === 'PM' && hours !== 12) hours += 12;
+            if (modifier === 'AM' && hours === 12) hours = 0;
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes}`;
         }
 
-        function convertTo12Hour(time24h) {
-            const [hours, minutes] = time24h.split(':');
-            const h = parseInt(hours, 10);
+        function convertTo12Hour(time24) {
+            if (!time24) return '';
+            if (time24.includes(' ')) return time24;
+            
+            const [hours, minutes] = time24.split(':');
+            let h = parseInt(hours);
             const ampm = h >= 12 ? 'PM' : 'AM';
-            const h12 = h % 12 || 12;
-            return `${h12}:${minutes} ${ampm}`;
+            h = h % 12;
+            h = h ? h : 12;
+            return `${h}:${minutes} ${ampm}`;
         }
 
-        // Close modal on outside click
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
-            });
-        });
+        function time24ToMinutes(time24) {
+            const [hours, minutes] = time24.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
     </script>
 </body>
 </html>
