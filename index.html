@@ -748,7 +748,8 @@
         const SUPABASE_URL = 'https://ytjqgxhcwnksnufvcxip.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0anFneGhjd25rc251ZnZjeGlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTE4NzksImV4cCI6MjA5NDA4Nzg3OX0.mxE1xdAkg5nxMHMDDsYs-rQu9pboyWIPRjCTHnwSTT8';
         
-        let supabase;
+        // Initialize Supabase Client
+        let supabaseClient = null;
         let supabaseConnected = false;
 
         const STORAGE_KEYS = {
@@ -785,11 +786,24 @@
 
         async function initSupabase() {
             try {
-                if (typeof supabaseJs !== 'undefined') {
-                    supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    
-                    // Test connection
-                    const { data, error } = await supabase.from('bookings').select('count', { count: 'exact', head: true });
+                // Check if Supabase library loaded
+                if (typeof supabase === 'undefined' || !supabase.createClient) {
+                    console.error('❌ Supabase CDN not loaded');
+                    console.log('📦 Falling back to localStorage mode');
+                    supabaseConnected = false;
+                    return;
+                }
+                
+                console.log('📦 Supabase CDN loaded, initializing client...');
+                
+                // Create Supabase client using v2 syntax
+                const { createClient } = supabase;
+                supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                
+                console.log('✅ Supabase client initialized');
+                
+                // Test connection
+                const { data, error } = await supabaseClient.from('bookings').select('count', { count: 'exact', head: true });
                     
                     if (error) {
                         console.warn('⚠️ Supabase connection test failed:', error.message);
@@ -797,6 +811,7 @@
                         supabaseConnected = false;
                     } else {
                         console.log('✅ Supabase connected successfully!');
+                    console.log('✅ Supabase ready for bookings');
                         supabaseConnected = true;
                     }
                 } else {
@@ -934,7 +949,7 @@
             let schedule = defaultSchedule;
             if (supabaseConnected) {
                 try {
-                    const { data: scheduleData } = await supabase.from('schedule').select('*');
+                    const { data: scheduleData } = await supabaseClient.from('schedule').select('*');
                     if (scheduleData) {
                         schedule = {};
                         scheduleData.forEach(s => {
@@ -991,7 +1006,7 @@
             if (supabaseConnected) {
                 try {
                     // Get bookings from Supabase - use 'canceled' (not 'cancelled')
-                    const { data: bookingsData, error: bookingsError } = await supabase
+                    const { data: bookingsData, error: bookingsError } = await supabaseClient
                         .from('bookings')
                         .select('*')
                         .eq('date', date)
@@ -1002,7 +1017,7 @@
                     }
                     
                     // Get blocked times from Supabase
-                    const { data: blockedData, error: blockedError } = await supabase
+                    const { data: blockedData, error: blockedError } = await supabaseClient
                         .from('blocked_times')
                         .select('*')
                         .eq('date', date);
@@ -1012,7 +1027,7 @@
                     }
                     
                     // Get schedule from Supabase
-                    const { data: scheduleData, error: scheduleError } = await supabase
+                    const { data: scheduleData, error: scheduleError } = await supabaseClient
                         .from('schedule')
                         .select('*');
                     
@@ -1142,7 +1157,7 @@
                 // Try to save to Supabase first (source of truth)
                 if (supabaseConnected) {
                     try {
-                        const { data, error } = await supabase
+                        const { data, error } = await supabaseClient
                             .from('bookings')
                             .insert([{
                                 client_name: String(formData.get('name') || '').trim(),

@@ -905,8 +905,9 @@
         const SUPABASE_URL = 'https://ytjqgxhcwnksnufvcxip.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0anFneGhjd25rc251ZnZjeGlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTE4NzksImV4cCI6MjA5NDA4Nzg3OX0.mxE1xdAkg5nxMHMDDsYs-rQu9pboyWIPRjCTHnwSTT8';
         
-        // Initialize Supabase
-        let supabase;
+        // Initialize Supabase Client
+        // Using supabaseClient to avoid conflicts with global supabase object
+        let supabaseClient = null;
         let supabaseConnected = false;
 
         const STORAGE_KEYS = {
@@ -957,23 +958,34 @@
         // Initialize Supabase connection
         async function initSupabase() {
             try {
-                if (typeof supabaseJs !== 'undefined') {
-                    supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    
-                    // Test connection
-                    const { data, error } = await supabase.from('bookings').select('count', { count: 'exact', head: true });
-                    
-                    if (error) {
-                        console.warn('⚠️ Supabase connection test failed:', error.message);
-                        console.log('📦 Admin will use localStorage fallback');
-                        supabaseConnected = false;
-                    } else {
-                        console.log('✅ Supabase connected successfully in admin!');
-                        supabaseConnected = true;
-                    }
-                } else {
-                    console.warn('⚠️ Supabase library not loaded, using localStorage fallback');
+                // Check if Supabase library loaded
+                if (typeof supabase === 'undefined' || !supabase.createClient) {
+                    console.error('❌ Supabase CDN not loaded');
+                    console.log('📦 Falling back to localStorage mode');
                     supabaseConnected = false;
+                    updateConnectionBanner();
+                    return;
+                }
+                
+                console.log('📦 Supabase CDN loaded, initializing client...');
+                
+                // Create Supabase client using v2 syntax
+                const { createClient } = supabase;
+                supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                
+                console.log('✅ Supabase client initialized');
+                
+                // Test connection
+                const { data, error } = await supabaseClient.from('bookings').select('count', { count: 'exact', head: true });
+                
+                if (error) {
+                    console.warn('⚠️ Supabase connection test failed:', error.message);
+                    console.log('📦 Admin will use localStorage fallback');
+                    supabaseConnected = false;
+                } else {
+                    console.log('✅ Supabase connected successfully in admin!');
+                    console.log('✅ Supabase auth ready');
+                    supabaseConnected = true;
                 }
             } catch (error) {
                 console.error('❌ Supabase initialization error:', error);
@@ -1001,7 +1013,7 @@
         async function checkAuth() {
             try {
                 // Check for existing Supabase session
-                const { data: { session }, error } = await supabase.auth.getSession();
+                const { data: { session }, error } = await supabaseClient.auth.getSession();
                 
                 if (error) throw error;
                 
@@ -1084,7 +1096,7 @@
                 loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
                 
                 // Sign in with Supabase Auth
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
@@ -1113,7 +1125,7 @@
         async function logout() {
             try {
                 // Sign out from Supabase Auth
-                const { error } = await supabase.auth.signOut();
+                const { error } = await supabaseClient.auth.signOut();
                 if (error) throw error;
                 
                 // Clear UI and reload
@@ -1132,7 +1144,7 @@
 
         async function showDashboard() {
             // Get current user info from Supabase
-            const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await supabaseClient.auth.getUser();
             const adminEmail = user?.email || 'Admin';
             
             document.getElementById('loginScreen').style.display = 'none';
@@ -1171,7 +1183,7 @@
             // SUPABASE IS PRIMARY SOURCE
             if (supabaseConnected) {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('bookings')
                         .select('*')
                         .order('date', { ascending: true });
@@ -1264,10 +1276,16 @@
         }
 
         async function updateStatus(id, status) {
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return;
+            }
+            
             // Update in Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    const { error } = await supabase
+                    const { error } = await supabaseClient
                         .from('bookings')
                         .update({ status: status, updated_at: new Date().toISOString() })
                         .eq('id', id);
@@ -1299,7 +1317,7 @@
             // Delete from Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    const { error } = await supabase
+                    const { error } = await supabaseClient
                         .from('bookings')
                         .delete()
                         .eq('id', id);
@@ -1387,10 +1405,16 @@
             // Add updated_at timestamp
             updates.updated_at = new Date().toISOString();
             
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return;
+            }
+            
             // Update in Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    const { error } = await supabase
+                    const { error } = await supabaseClient
                         .from('bookings')
                         .update(updates)
                         .eq('id', id);
@@ -1430,10 +1454,16 @@
         // ============================================
         
         async function getClientNotes() {
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return [];
+            }
+            
             // SUPABASE IS PRIMARY SOURCE
             if (supabaseConnected) {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('client_notes')
                         .select('*')
                         .order('created_at', { ascending: false });
@@ -1543,6 +1573,13 @@
 
         async function addClientNote(e, phone, name) {
             e.preventDefault();
+            
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return;
+            }
+            
             const input = e.target.querySelector('input');
             const noteText = input.value.trim();
             if (!noteText) return;
@@ -1550,7 +1587,7 @@
             // Save to Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('client_notes')
                         .insert([{
                             client_phone: phone,
@@ -1592,7 +1629,7 @@
             // SUPABASE IS PRIMARY SOURCE
             if (supabaseConnected) {
                 try {
-                    const { data, error } = await supabase.from('schedule').select('*');
+                    const { data, error } = await supabaseClient.from('schedule').select('*');
                     if (!error && data && data.length > 0) {
                         const schedule = {};
                         data.forEach(s => {
@@ -1657,7 +1694,7 @@
             // Update Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    await supabase.from('schedule').upsert({
+                    await supabaseClient.from('schedule').upsert({
                         day: day,
                         open: isOpen,
                         start_time: schedule[day].start,
@@ -1681,7 +1718,7 @@
             // Update Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    await supabase.from('schedule').upsert({
+                    await supabaseClient.from('schedule').upsert({
                         day: day,
                         open: schedule[day].open,
                         start_time: schedule[day].start,
@@ -1705,10 +1742,16 @@
         // ============================================
         
         async function getBlockedTimes() {
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return [];
+            }
+            
             // SUPABASE IS PRIMARY SOURCE
             if (supabaseConnected) {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('blocked_times')
                         .select('*')
                         .order('date', { ascending: true });
@@ -1781,10 +1824,16 @@
                 return;
             }
             
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return;
+            }
+            
             // Save to Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('blocked_times')
                         .insert([{
                             date: date,
@@ -1836,10 +1885,16 @@
         }
 
         async function removeBlockedTime(id) {
+            // Safety check
+            if (!supabaseClient) {
+                console.error('❌ Supabase client not initialized');
+                return;
+            }
+            
             // Delete from Supabase first (source of truth)
             if (supabaseConnected) {
                 try {
-                    const { error } = await supabase
+                    const { error } = await supabaseClient
                         .from('blocked_times')
                         .delete()
                         .eq('id', id);
