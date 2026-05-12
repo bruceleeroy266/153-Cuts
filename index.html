@@ -319,19 +319,52 @@
             background: var(--gold);
             color: var(--dark);
             border-color: var(--gold);
-            font-weight: 600;
+            font-weight: 700;
+            transform: scale(0.96);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
         }
 
-        .time-slot.disabled {
-            opacity: 0.3;
+        .time-slot.disabled,
+        .time-slot.unavailable {
+            opacity: 0.35;
             cursor: not-allowed;
             text-decoration: line-through;
+            pointer-events: none;
         }
 
-        .time-slot.unavailable {
-            background: var(--danger);
+        .selected-time-display {
+            margin-top: 10px;
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Time Select Dropdown */
+        #timeSelect {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--dark-gray);
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1rem;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        #timeSelect:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        #timeSelect:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        #timeSelect option {
+            background: var(--dark-gray);
+            color: var(--white);
         }
 
         /* Form Message */
@@ -645,28 +678,17 @@
                 
                 <div class="form-group">
                     <label for="date">Date *</label>
-                    <input type="date" id="date" name="date" required>
+                    <input type="date" id="date" name="date" required min="">
                 </div>
                 
                 <div class="form-group">
-                    <label>Select Time *</label>
-                    <input type="hidden" id="selectedTime" name="time">
+                    <label for="timeSelect">Select Time *</label>
                     <div class="closed-message hidden" id="closedMessage">
                         <i class="fas fa-calendar-times"></i> We're closed on this day. Please select another date.
                     </div>
-                    <div id="timeSlotGroup">
-                        <div class="time-slots" id="timeSlots">
-                            <div class="time-slot" data-time="9:00 AM">9:00 AM</div>
-                            <div class="time-slot" data-time="10:00 AM">10:00 AM</div>
-                            <div class="time-slot" data-time="11:00 AM">11:00 AM</div>
-                            <div class="time-slot" data-time="12:00 PM">12:00 PM</div>
-                            <div class="time-slot" data-time="1:00 PM">1:00 PM</div>
-                            <div class="time-slot" data-time="2:00 PM">2:00 PM</div>
-                            <div class="time-slot" data-time="3:00 PM">3:00 PM</div>
-                            <div class="time-slot" data-time="4:00 PM">4:00 PM</div>
-                            <div class="time-slot" data-time="5:00 PM">5:00 PM</div>
-                        </div>
-                    </div>
+                    <select id="timeSelect" name="time" required>
+                        <option value="">Select an available time</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -888,6 +910,16 @@
             }
         }
 
+        function initializeForm() {
+            // Set min date to today
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.min = today;
+                console.log('📅 Date input initialized with min:', today);
+            }
+        }
+
         function setupEventListeners() {
             // Mobile menu
             const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
@@ -911,24 +943,10 @@
                 });
             }
 
-            // Time slot selection
-            document.querySelectorAll('.time-slot').forEach(slot => {
-                slot.addEventListener('click', () => {
-                    if (slot.classList.contains('disabled') || slot.classList.contains('unavailable')) return;
-
-                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                    slot.classList.add('selected');
-                    document.getElementById('selectedTime').value = slot.dataset.time;
-                    clearBookingMessage();
-                });
-            });
-
-            // Date change - update available slots
+            // Date change - update available times
             document.getElementById('date').addEventListener('change', async () => {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                document.getElementById('selectedTime').value = '';
                 clearBookingMessage();
-                await updateTimeSlots();
+                await updateAvailableTimes();
             });
 
             // Form submission
@@ -936,9 +954,15 @@
         }
 
         async function updateTimeSlots() {
+            console.log('=== updateTimeSlots running ===');
+            
             const date = document.getElementById('date').value;
             const closedMessage = document.getElementById('closedMessage');
             const timeSlotGroup = document.getElementById('timeSlotGroup');
+            
+            // Preserve current selection before updating
+            const currentSelected = document.getElementById('selectedTime').value;
+            console.log('Current selectedTime before update:', currentSelected);
 
             if (!date) return;
 
@@ -1001,20 +1025,30 @@
             // Get available slots
             const availableSlots = await getAvailableTimeSlots(date);
 
+            // Update slot states
+            let selectedStillAvailable = false;
             document.querySelectorAll('.time-slot').forEach(slot => {
                 const time = slot.dataset.time;
                 slot.classList.remove('disabled', 'unavailable', 'selected');
 
                 if (!availableSlots.includes(time)) {
                     slot.classList.add('disabled');
+                } else if (time === currentSelected) {
+                    // Restore selection if still available
+                    slot.classList.add('selected');
+                    selectedStillAvailable = true;
+                    console.log('✅ Restored selection after slot update:', time);
                 }
             });
 
-            // Clear selected time if no longer available
-            const selectedTime = document.getElementById('selectedTime').value;
-            if (selectedTime && !availableSlots.includes(selectedTime)) {
+            // Clear selection display if no longer available
+            if (currentSelected && !selectedStillAvailable) {
+                console.log('⚠️ Selected time no longer available, clearing:', currentSelected);
                 document.getElementById('selectedTime').value = '';
+                document.getElementById('selectedTimeDisplay').textContent = '';
             }
+            
+            console.log('=== updateTimeSlots complete ===');
         }
 
         async function getAvailableTimeSlots(date) {
@@ -1149,10 +1183,10 @@
                 return;
             }
 
-            const selectedTime = document.getElementById('selectedTime').value;
+            const selectedTime = document.getElementById('timeSelect').value;
             if (!selectedTime) {
-                showBookingMessage('Please select a time slot before requesting your appointment.');
-                document.getElementById('timeSlots').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showBookingMessage('Please select an available time.');
+                document.getElementById('timeSelect').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 return;
             }
 
@@ -1171,11 +1205,15 @@
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Request...';
 
                 // Double-check availability before inserting
-                const availableSlots = await getAvailableTimeSlots(date);
-                console.log('Available slots:', availableSlots);
-                if (!availableSlots.includes(time)) {
-                    showBookingMessage('Sorry, this time slot was just booked. Please select another time.');
-                    await updateTimeSlots();
+                const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+                const schedule = await getScheduleForDate(date);
+                const daySchedule = schedule[dayOfWeek];
+                const availableTimes = await getAvailableTimes(date, daySchedule);
+                
+                console.log('Available times:', availableTimes);
+                if (!availableTimes.includes(time)) {
+                    showBookingMessage('Sorry, this time was just booked. Please select another time.');
+                    await updateAvailableTimes();
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-calendar-check"></i> Request Appointment';
                     return;
@@ -1294,12 +1332,15 @@
                 }
                 
                 successModal.classList.add('active');
+                console.log('Booking success, refreshing occupied slots');
 
-                // Reset form
+                // Reset form and clear selection
                 form.reset();
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                document.getElementById('selectedTime').value = '';
-                await updateTimeSlots();
+                document.getElementById('timeSelect').innerHTML = '<option value="">Select an available time</option>';
+                document.getElementById('timeSelect').disabled = true;
+                
+                // Refresh available times to show newly booked time as unavailable
+                await updateAvailableTimes();
 
             } catch (error) {
                 console.error('Booking error:', error);
@@ -1331,6 +1372,161 @@
                 closeModal();
             }
         });
+
+        // Helper function to get schedule for a date
+        async function getScheduleForDate(date) {
+            let schedule = defaultSchedule;
+            
+            if (supabaseConnected && supabaseClient) {
+                try {
+                    const { data: scheduleData, error } = await supabaseClient.from('schedule').select('*');
+                    if (!error && scheduleData && scheduleData.length > 0) {
+                        schedule = {};
+                        scheduleData.forEach(s => {
+                            schedule[s.day.toLowerCase()] = {
+                                open: s.open,
+                                start: s.start_time,
+                                end: s.end_time
+                            };
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error fetching schedule:', e);
+                }
+            }
+            
+            return schedule;
+        }
+
+        // Helper function to get available times for a date
+        async function getAvailableTimes(date, daySchedule) {
+            let bookings = [];
+            let blockedTimes = [];
+            
+            // Try Supabase first
+            if (supabaseConnected && supabaseClient) {
+                try {
+                    // Get bookings (pending or confirmed only)
+                    const { data: bookingsData, error: bookingsError } = await supabaseClient
+                        .from('bookings')
+                        .select('*')
+                        .eq('date', date)
+                        .in('status', ['pending', 'confirmed']);
+                    
+                    if (!bookingsError && bookingsData) {
+                        bookings = bookingsData;
+                    }
+                    
+                    // Get blocked times
+                    const { data: blockedData, error: blockedError } = await supabaseClient
+                        .from('blocked_times')
+                        .select('*')
+                        .eq('date', date);
+                    
+                    if (!blockedError && blockedData) {
+                        blockedTimes = blockedData;
+                    }
+                } catch (e) {
+                    console.error('Error fetching from Supabase:', e);
+                }
+            }
+            
+            // Fallback to localStorage
+            if (bookings.length === 0) {
+                bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.bookings) || '[]')
+                    .filter(b => b.date === date && ['pending', 'confirmed'].includes(b.status));
+            }
+            
+            if (blockedTimes.length === 0) {
+                blockedTimes = JSON.parse(localStorage.getItem(STORAGE_KEYS.blockedTimes) || '[]')
+                    .filter(b => b.date === date);
+            }
+            
+            // Generate all possible times (1-hour intervals)
+            const allTimes = [];
+            const startMinutes = timeToMinutes(daySchedule.start);
+            const endMinutes = timeToMinutes(daySchedule.end);
+            
+            for (let minutes = startMinutes; minutes < endMinutes; minutes += 60) {
+                allTimes.push(minutesToTime12(minutes));
+            }
+            
+            // Get booked times
+            const bookedTimes = bookings.map(b => b.time);
+            
+            // Get blocked time ranges
+            const blockedRanges = blockedTimes.map(b => ({
+                start: timeToMinutes(b.start || b.start_time),
+                end: timeToMinutes(b.end || b.end_time)
+            }));
+            
+            // Filter available times
+            return allTimes.filter(time => {
+                // Check if booked
+                if (bookedTimes.includes(time)) return false;
+                
+                // Check if blocked
+                const slotMinutes = timeToMinutes(convertTo24Hour(time));
+                for (const range of blockedRanges) {
+                    if (slotMinutes >= range.start && slotMinutes < range.end) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+        }
+
+        // Update available times dropdown
+        async function updateAvailableTimes() {
+            console.log('=== updateAvailableTimes running ===');
+            
+            const date = document.getElementById('date').value;
+            const closedMessage = document.getElementById('closedMessage');
+            const timeSelect = document.getElementById('timeSelect');
+
+            if (!date) {
+                timeSelect.innerHTML = '<option value="">Select an available time</option>';
+                timeSelect.disabled = true;
+                return;
+            }
+
+            // Check if day is open
+            const dayOfWeek = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            console.log(`Checking schedule for ${dayOfWeek}...`);
+            
+            const schedule = await getScheduleForDate(date);
+            const daySchedule = schedule[dayOfWeek];
+            
+            console.log(`${dayOfWeek} schedule:`, daySchedule);
+
+            if (!daySchedule || !daySchedule.open) {
+                console.log(`${dayOfWeek} is CLOSED`);
+                closedMessage.classList.remove('hidden');
+                timeSelect.innerHTML = '<option value="">Closed on this day</option>';
+                timeSelect.disabled = true;
+                return;
+            }
+            
+            console.log(`${dayOfWeek} is OPEN: ${daySchedule.start} - ${daySchedule.end}`);
+            closedMessage.classList.add('hidden');
+            timeSelect.disabled = false;
+
+            // Get available times
+            const availableTimes = await getAvailableTimes(date, daySchedule);
+            console.log('Available times:', availableTimes);
+
+            // Populate dropdown
+            timeSelect.innerHTML = '<option value="">Select an available time</option>';
+            availableTimes.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                timeSelect.appendChild(option);
+            });
+            
+            console.log('=== updateAvailableTimes complete ===');
+        }
     </script>
 </body>
 </html>
